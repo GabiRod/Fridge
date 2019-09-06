@@ -1,23 +1,108 @@
+/* PRESET */
 html {
   font-family: 'Roboto', sans-serif;
   height: 100%;
-  text-align: center;
   width: 100%;
-  font-weight: 200;
 }
 
 h1 {
   font-family: 'Neucha';
   font-size: 2em;
-  font-weight: 300;
   letter-spacing: 3px;
 }
+p {
+  font-size: 0.8em;
+}
 
+/* NAVIGATION */
 nav .brand-logo {
-  left: 20px;
+top: 7px;
+left: 19px;
+transform: translateX(0);
+-webkit-transform: translateX(0);
+}
+
+.nav-extended{
+  background-color: #F28D17;
+}
+/*  END OF NAVIGATION */
+
+/* SEARCH PAGE */
+.container {
+  text-align: center;
+}
+
+.card {
+  text-align: left;
+}
+
+.fixed-action-btn {
+  top: 0px;
+  right: 14px;
+  padding: 2px;
+  bottom:inherit;
+  position: absolute;
 }
 
 .logo-img {
-  width: 40px;
+  width: 35px;
 height: auto;
 }
+/* end of the search page */
+
+/* BUTTON */
+.radius {
+  background-color: #F28D17;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.waves-effect{
+    background-color: #F28D17;
+}
+
+.waves-effect:hover{
+  background-color: #F28C17;
+}
+/* end of BUTTONS */
+
+/*welcome page*/
+#welcome {
+  background: #F28D17;
+  text-align: center;
+}
+
+#welcome, h2{
+  color: white;
+  font-size: 1.5em;
+}
+
+.logo {
+width: 200px;
+height: auto;
+}
+
+.firstBtn {
+background-color: white;
+color: #F28D17;
+}
+
+.link {
+  color: white;
+  text-decoration: underline;
+}
+
+.login-width {
+  width: 200px;
+}
+/* END welcome page*/
+
+
+/* log in page*/
+
+#login {
+  background: #F28D17;
+  text-align: center;
+  color: white;
+}
+/* log in page*/
