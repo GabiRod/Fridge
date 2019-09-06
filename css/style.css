@@ -1,0 +1,23 @@
+html {
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+  font-weight: 200;
+}
+
+h1 {
+  font-family: 'Neucha';
+  font-size: 2em;
+  font-weight: 300;
+  letter-spacing: 3px;
+}
+
+nav .brand-logo {
+  left: 20px;
+}
+
+.logo-img {
+  width: 40px;
+height: auto;
+}
