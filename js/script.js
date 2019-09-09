@@ -2,7 +2,13 @@
 
 // initialize the plugin navbar
 const tabs = document.querySelector("#tabs")
-const instance = M.Tabs.init(tabs);
+const instance = M.Tabs.init(tabs, {
+  onShow: function(sectionElement) {
+    console.log(sectionElement.id);
+
+    location.href = `#${sectionElement.id}`;
+  }
+});
 
 // initialize the floating button
 document.addEventListener('DOMContentLoaded', function() {
@@ -86,12 +92,6 @@ function setDefaultPage() {
 };
 
 setDefaultPage();
-
-// add anchor
-// if ($active.length > 0) {
-//   var id = $(this).parent().attr('id');
-//   $('a[href="#'+id+'"]').trigger('click');
-// }
 
 // RECIPES
 
