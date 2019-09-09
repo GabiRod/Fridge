@@ -10,23 +10,274 @@ h1 {
   font-size: 2em;
   letter-spacing: 3px;
 }
+
 p {
   font-size: 0.8em;
 }
 
-/* NAVIGATION */
-nav .brand-logo {
-top: 7px;
-left: 19px;
-transform: translateX(0);
--webkit-transform: translateX(0);
+/* LOADER */
+/* @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
+body {
+  background-color: #f28d17;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
-.nav-extended{
+#cooking{
+  position: relative;
+  margin: 0 auto;
+  top: 0;
+  width: 75vh;
+  height: 75vh;
+  overflow: hidden;
+}
+#cooking .bubble {
+  position: absolute;
+  border-radius: 100%;
+  box-shadow: 0 0 0.25vh #fff;
+  opacity: 0;
+}
+#cooking .bubble:nth-child(1) {
+  margin-top: 2.5vh;
+  left: 58%;
+  width: 2.5vh;
+  height: 2.5vh;
+  background-color: #fff;
+  animation: bubble 2s cubic-bezier(0.53, 0.16, 0.39, 0.96) infinite;
+}
+#cooking .bubble:nth-child(2) {
+  margin-top: 3vh;
+  left: 52%;
+  width: 2vh;
+  height: 2vh;
+  background-color: #fff;
+  animation: bubble 2s ease-in-out 0.35s infinite;
+}
+#cooking .bubble:nth-child(3) {
+  margin-top: 1.8vh;
+  left: 50%;
+  width: 1.5vh;
+  height: 1.5vh;
+  background-color: white;
+  animation: bubble 1.5s cubic-bezier(0.53, 0.16, 0.39, 0.96) 0.55s infinite;
+}
+#cooking .bubble:nth-child(4) {
+  margin-top: 2.7vh;
+  left: 56%;
+  width: 1.2vh;
+  height: 1.2vh;
+  background-color: #f7f7f7;
+  animation: bubble 1.8s cubic-bezier(0.53, 0.16, 0.39, 0.96) 0.9s infinite;
+}
+#cooking .bubble:nth-child(5) {
+  margin-top: 2.7vh;
+  left: 63%;
+  width: 1.1vh;
+  height: 1.1vh;
+  background-color: #f0f0f0;
+  animation: bubble 1.6s ease-in-out 1s infinite;
+}
+#cooking #area {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+  background-color: transparent;
+  transform-origin: 15% 60%;
+  animation: flip 2.1s ease-in-out infinite;
+}
+#cooking #area #sides {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: 15% 60%;
+  animation: switchSide 2.1s ease-in-out infinite;
+}
+#cooking #area #sides #handle {
+  position: absolute;
+  bottom: 18%;
+  right: 80%;
+  width: 35%;
+  height: 20%;
+  background-color: transparent;
+  border-top: 1vh solid white;
+  border-left: 1vh solid transparent;
+  border-radius: 100%;
+  transform: rotate(20deg) rotateX(0deg) scale(1.3, 0.9);
+}
+#cooking #area #sides #pan {
+  position: absolute;
+  bottom: 20%;
+  right: 30%;
+  width: 50%;
+  height: 8%;
+  background-color: white;
+  border-radius: 0 0 1.4em 1.4em;
+  transform-origin: -15% 0;
+}
+#cooking #area #pancake {
+  position: absolute;
+  top: 24%;
+  width: 100%;
+  height: 100%;
+  transform: rotateX(85deg);
+  animation: jump 2.1s ease-in-out infinite;
+}
+#cooking #area #pancake #pastry {
+  position: absolute;
+  bottom: 26%;
+  right: 37%;
+  width: 40%;
+  height: 45%;
+  background-color: white;
+  box-shadow: 0 0 3px 0 white;
+  border-radius: 100%;
+  transform-origin: -20% 0;
+  animation: fly 2.1s ease-in-out infinite;
+}
+@keyframes jump {
+  0% {
+    top: 24%;
+    transform: rotateX(85deg);
+  }
+  25% {
+    top: 10%;
+    transform: rotateX(0deg);
+  }
+  50% {
+    top: 30%;
+    transform: rotateX(85deg);
+  }
+  75% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(85deg);
+  }
+}
+@keyframes flip {
+  0% {
+    transform: rotate(0deg);
+  }
+  5% {
+    transform: rotate(-27deg);
+  }
+  30%, 50% {
+    transform: rotate(0deg);
+  }
+  55% {
+    transform: rotate(27deg);
+  }
+  83.3% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes switchSide {
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(180deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+@keyframes fly {
+  0% {
+    bottom: 26%;
+    transform: rotate(0deg);
+  }
+  10% {
+    bottom: 40%;
+  }
+  50% {
+    bottom: 26%;
+    transform: rotate(-190deg);
+  }
+  80% {
+    bottom: 40%;
+  }
+  100% {
+    bottom: 26%;
+    transform: rotate(0deg);
+  }
+}
+@keyframes bubble {
+  0% {
+    transform: scale(0.15, 0.15);
+    top: 80%;
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1, 1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.33, 0.33);
+    top: 60%;
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1, 1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.2, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 0.25;
+  }
+} */
+/* NAVIGATION */
+.hide-navbar {
+  display: none;
+}
+
+nav .brand-logo {
+  top: 7px;
+  left: 19px;
+  transform: translateX(0);
+  -webkit-transform: translateX(0);
+}
+
+.nav-extended {
   background-color: #F28D17;
 }
-/*  END OF NAVIGATION */
 
+.profile-photo {
+  width: 100%;
+  height: auto;
+}
+
+#log-out-ul {
+  width: 100%;
+}
+
+.log-out-li {
+  margin-top: ;
+  margin-bottom: auto;
+}
+
+.log-out {
+  width: 38px;
+  height: 38px;
+}
+
+nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-small>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-flat>.material-icons, nav ul a.btn-floating>.material-icons {
+  color: black;
+}
+
+/*  END OF NAVIGATION */
 /* SEARCH PAGE */
 .container {
   text-align: center;
@@ -36,20 +287,20 @@ transform: translateX(0);
   text-align: left;
 }
 
-.fixed-action-btn {
+#profile-photo-button {
   top: 0px;
   right: 14px;
   padding: 2px;
-  bottom:inherit;
+  bottom: inherit;
   position: absolute;
 }
 
 .logo-img {
   width: 35px;
-height: auto;
+  height: auto;
 }
-/* end of the search page */
 
+/* end of the search page */
 /* BUTTON */
 .radius {
   background-color: #F28D17;
@@ -57,52 +308,108 @@ height: auto;
   text-align: center;
 }
 
-.waves-effect{
-    background-color: #F28D17;
+.waves-effect {
+  background-color: #F28D17;
 }
 
-.waves-effect:hover{
+.waves-effect:hover {
   background-color: #F28C17;
 }
-/* end of BUTTONS */
 
+/* end of BUTTONS */
 /*welcome page*/
+/* ===========================================> not responsive */
 #welcome {
   background: #F28D17;
   text-align: center;
+  height: 100vh;
+  padding: 1rem 20px;
+  /* flex-direction: column;
+  align-items: center;
+  justify-content: space-around; */
 }
 
-#welcome, h2{
+.welcome, h2 {
   color: white;
   font-size: 1.5em;
+  padding-top: 1%;
 }
 
 .logo {
-width: 200px;
-height: auto;
+  width: 150px;
+  height: auto;
 }
 
 .firstBtn {
-background-color: white;
-color: #F28D17;
+  background-color: white;
+  width: 250px;
+  margin-bottom: 5%;
+  color: #F28D17;
 }
 
 .link {
   color: white;
   text-decoration: underline;
+  font-size: 15px;
+  display: inherit;
 }
 
 .login-width {
   width: 200px;
 }
+
 /* END welcome page*/
-
-
 /* log in page*/
-
-#login {
+.login {
   background: #F28D17;
   text-align: center;
   color: white;
+  padding: 1rem 20px;
+  height: 100vh;
 }
+
 /* log in page*/
+/* RECIPES */
+.add {
+  background-color: #F28C17;
+}
+
+/* pop up window- add new recipe */
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.popup .close:hover {
+  color: #F28C17;
+}
+
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+/* end of pop up window- add new recipe */
+/* END OF RECIPES */

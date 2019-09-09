@@ -15,6 +15,25 @@
 
 <body>
   <header>
+    <!-- loader -->
+    <!-- <div id="cooking">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div id="area">
+        <div id="sides">
+            <div id="pan"></div>
+            <div id="handle"></div>
+        </div>
+        <div id="pancake">
+            <div id="pastry"></div>
+        </div>
+    </div>
+</div> -->
+
+
     <!-- Navigation -->
     <nav class="nav-extended">
       <div class="nav-wrapper">
@@ -23,12 +42,17 @@
         </a>
 
         <!-- floating log in -->
-        <div class="fixed-action-btn">
+        <div id="profile-photo-button" class="fixed-action-btn nav">
           <a class="btn-floating btn-medium white">
-            <img src="" alt="">
+            <img class="profile-photo" src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
+              alt="Profile photo">
           </a>
-          <ul>
-            <li><a class="btn-floating red"><i class="material-icons">exit_to_app</i></a></li>
+          <ul id="log-out-ul">
+            <li class="log-out-li">
+              <a class="btn-floating white log-out">
+                <i class="material-icons log-out-icon">exit_to_app</i>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -48,17 +72,17 @@
   </header>
 
   <!-- welcome page -->
-  <!-- <section id="welcome" class="page col s12">
+  <section id="welcome" class="page col s12 welcome">
 
   <h2> WELCOME! </h2>
+    <p>No More Food Waste</p>
   <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
+
   <p>Find recipes from the ingredients that you already have at home!</p>
-  <p>NO MORE FOOD WASTE</p>
-  <a class="waves-effect waves-light btn firstBtn radius">LET'S COOK</a>
-  <br>
-  <br>
+  <a href="#search" class="waves-effect waves-light btn firstBtn radius">LET'S COOK</a>
+
   <a href="#login" class="link">LOG IN</a>
-</section> -->
+</section>
 
   <!-- home page to search ingredients -->
   <section id="search" class="page col s12">
@@ -66,9 +90,8 @@
       <div class="row">
         <form class="col s12">
           <div class="row">
-            <div class="input-field col s10">
-              <textarea onkeyup="search(this.value)" id="icon_prefix2" class="materialize-textarea"></textarea>
-              <label for="icon_prefix2">Type your igredients</label>
+            <div class="input-field col s11">
+              <input onkeyup="search(this.value)" id="icon_prefix2" class="materialize-input" placeholder="Type your ingredient"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -100,16 +123,17 @@
   <!-- end of search page -->
 
   <!--  log in page -->
-  <!-- <section id="login" class="page col s12">
+  <section id="login" class="page col s12 login">
 <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
 <p>Find recipes from the ingredients that you already have at home!</p>
 <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH GOOGLE</a>
+<a> <fb:login-button scope="public_profile,email" onclick="checkLoginState();">LOG IN WITH FACEBOOK</fb:login-button> </a>
 <br>
 <br>
 <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH FACEBOOK</a>
 <br>
 
-  </section> -->
+  </section>
 
   <!-- favourites page -->
   <section id="favourites" class="page col s12">
@@ -117,9 +141,8 @@
       <div class="row">
         <form class="col s12">
           <div class="row">
-            <div class="input-field col s10">
-              <textarea onkeyup="search(this.value)" id="icon_prefix2" class="materialize-textarea"></textarea>
-              <label for="icon_prefix2">Type your recipe</label>
+            <div class="input-field col s11">
+              <input onkeyup="search(this.value)" id="icon_prefix2" class="materialize-input" placeholder="Type your recipe"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -155,18 +178,19 @@
       <div class="row">
         <form class="col s12">
           <div class="row">
-            <div class="input-field col s10">
-              <textarea onkeyup="search(this.value)" id="icon_prefix2" class="materialize-textarea"></textarea>
-              <label for="icon_prefix2">Type your recipe</label>
+            <div class="input-field col s11">
+              <input onkeyup="search(this.value)" id="icon_prefix2" class="materialize-input" placeholder="Type your recipe"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
         </form>
         <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
       </div>
+
       <!-- button show recipes -->
 
       <!-- card -->
+      <!-- <div class="row" id="recipes-container"> -->
       <div class="row">
         <div class="col s12 m6">
           <div class="card">
@@ -185,7 +209,51 @@
       </div>
       <!-- card  ends -->
     </div>
+    <!-- add recipe as a floating button -->
+    <div class="fixed-action-btn">
+      <a href="#popup1" class="btn-floating btn-large add">
+        <i class="large material-icons">add</i>
+      </a>
+    </div>
   </section>
+  <!-- pop up- Add new recipe -->
+  <div id="popup1" class="overlay">
+    <div class="popup">
+      <h2>Add your own recipe</h2>
+      <a class="close" href="#">&times;</a>
+      <div class="content">
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input placeholder="Type the title" id="title" type="text" class="validate">
+                <label for="title">Title of your recipe</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="file-field input-field" action="#">
+                <div class="btn waves-effect waves-light btn radius">
+                  <span>Image </span>
+                  <input type="file">
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text">
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="password" type="password" class="validate">
+                <label for="password">Password</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- recipe page -->
   <section>
