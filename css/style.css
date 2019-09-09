@@ -319,20 +319,24 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 /* end of BUTTONS */
 /*welcome page*/
 /* ===========================================> not responsive */
-#welcome {
+.welcome {
   background: #F28D17;
   text-align: center;
   height: 100vh;
-  padding: 1rem 20px;
-  /* flex-direction: column;
+  padding: 2rem 20px;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-around; */
+  justify-content: space-around;
 }
 
 .welcome, h2 {
   color: white;
   font-size: 1.5em;
-  padding-top: 1%;
+  margin: 0;
+}
+
+.welcome, p {
+  margin: 0;
 }
 
 .logo {
@@ -343,7 +347,6 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 .firstBtn {
   background-color: white;
   width: 250px;
-  margin-bottom: 5%;
   color: #F28D17;
 }
 
@@ -366,6 +369,9 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   color: white;
   padding: 1rem 20px;
   height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
 
 /* log in page*/
@@ -411,5 +417,6 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   max-height: 30%;
   overflow: auto;
 }
+
 /* end of pop up window- add new recipe */
 /* END OF RECIPES */

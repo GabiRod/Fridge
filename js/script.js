@@ -4,7 +4,7 @@ let activePage = "welcome";
 
 // initialize the plugin navbar
 const tabs = document.querySelector("#tabs")
-const instance = M.Tabs.init(tabs, {
+const tabsInstance = M.Tabs.init(tabs, {
   onShow: function(sectionElement) {
     console.log(sectionElement.id);
 
@@ -45,17 +45,24 @@ function hideAllPages() {
 
 // show page or tab
 function showPage(pageId, isTab) {
+  let display = 'block';
+
   activePage = pageId;
-
   hideAllPages();
-  document.querySelector(`#${pageId}`).style.display = "block";
-  setActiveTab(pageId);
 
-  // load posts if activePage === "movie"
-  if (activePage === "welcome" || activePage === "login") {
+  // bip bip bup bup
+  if (activePage === 'welcome' || activePage === 'login') {
+    display = 'flex';
     document.querySelector(".nav-extended").classList.add("hide-navbar")
   } else {
     document.querySelector(".nav-extended").classList.remove("hide-navbar")
+  }
+
+  document.querySelector(`#${pageId}`).style.display = display;
+  setActiveTab(pageId);
+
+  if (isTab) {
+    tabsInstance.select(pageId);
   }
 };
 
