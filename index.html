@@ -37,14 +37,15 @@
     <!-- Navigation -->
     <nav class="nav-extended">
       <div class="nav-wrapper">
-        <a href="#search" class="brand-logo">
+        <a href="#search" onclick="showPage('search')" class="brand-logo">
           <img src="img/whatsinyourfridge.png" class="logo-img" alt="logo">
         </a>
 
         <!-- floating log in -->
         <div id="profile-photo-button" class="fixed-action-btn nav">
           <a class="btn-floating btn-medium white">
-            <img class="profile-photo" src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
+            <img class="profile-photo"
+              src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
               alt="Profile photo">
           </a>
           <ul id="log-out-ul">
@@ -74,15 +75,29 @@
   <!-- welcome page -->
   <section id="welcome" class="page col s12 welcome">
 
-  <h2> WELCOME! </h2>
+    <h2> WELCOME! </h2>
     <p>No More Food Waste</p>
-  <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
+    <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
 
-  <p>Find recipes from the ingredients that you already have at home!</p>
-  <a href="#search" class="waves-effect waves-light btn firstBtn radius">LET'S COOK</a>
+    <p>Find recipes from the ingredients that you already have at home!</p>
+    <a href="#search" onclick="showPage('search')" class="waves-effect waves-light btn firstBtn radius">LET'S COOK</a>
 
-  <a href="#login" class="link">LOG IN</a>
-</section>
+    <a href="#login" onclick="showPage('login')" class="link">LOG IN</a>
+  </section>
+
+  <!--  log in page -->
+  <section id="login" class="page col s12 login">
+    <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
+    <p>Find recipes from the ingredients that you already have at home!</p>
+    <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH GOOGLE</a>
+    <a>
+      <fb:login-button scope="public_profile,email" onclick="checkLoginState();">LOG IN WITH FACEBOOK</fb:login-button>
+    </a>
+    <br>
+    <br>
+    <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH FACEBOOK</a>
+    <br>
+  </section>
 
   <!-- home page to search ingredients -->
   <section id="search" class="page col s12">
@@ -96,9 +111,9 @@
             </div>
           </div>
         </form>
+        <!-- button show recipes -->
         <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
       </div>
-      <!-- button show recipes -->
 
       <!-- card -->
       <div class="row">
@@ -122,19 +137,6 @@
   </section>
   <!-- end of search page -->
 
-  <!--  log in page -->
-  <section id="login" class="page col s12 login">
-<img src="img/whatsinyourfridge.png" class="logo" alt="logo">
-<p>Find recipes from the ingredients that you already have at home!</p>
-<a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH GOOGLE</a>
-<a> <fb:login-button scope="public_profile,email" onclick="checkLoginState();">LOG IN WITH FACEBOOK</fb:login-button> </a>
-<br>
-<br>
-<a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH FACEBOOK</a>
-<br>
-
-  </section>
-
   <!-- favourites page -->
   <section id="favourites" class="page col s12">
     <div class="container">
@@ -147,9 +149,9 @@
             </div>
           </div>
         </form>
+        <!-- button show recipes -->
         <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
       </div>
-      <!-- button show recipes -->
 
       <!-- card -->
       <div class="row">
@@ -184,10 +186,9 @@
             </div>
           </div>
         </form>
+        <!-- button show recipes -->
         <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
       </div>
-
-      <!-- button show recipes -->
 
       <!-- card -->
       <!-- <div class="row" id="recipes-container"> -->
@@ -216,6 +217,7 @@
       </a>
     </div>
   </section>
+
   <!-- pop up- Add new recipe -->
   <div id="popup1" class="overlay">
     <div class="popup">

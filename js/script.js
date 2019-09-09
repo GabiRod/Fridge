@@ -1,5 +1,7 @@
 "use strict";
 
+let activePage = "welcome";
+
 // initialize the plugin navbar
 const tabs = document.querySelector("#tabs")
 const instance = M.Tabs.init(tabs, {
@@ -7,6 +9,7 @@ const instance = M.Tabs.init(tabs, {
     console.log(sectionElement.id);
 
     location.href = `#${sectionElement.id}`;
+    activePage = sectionElement.id;
   }
 });
 
@@ -32,8 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
 //   showLoader(false);
 // }, 900);
 
-let activePage = "welcome";
-
 // hide all pages
 function hideAllPages() {
   let pages = document.querySelectorAll(".page");
@@ -43,24 +44,15 @@ function hideAllPages() {
 };
 
 // show page or tab
-function showPage(pageId) {
+function showPage(pageId, isTab) {
   activePage = pageId;
 
   hideAllPages();
   document.querySelector(`#${pageId}`).style.display = "block";
-  location.href = `#${pageId}`;
   setActiveTab(pageId);
 
   // load posts if activePage === "movie"
-  if (activePage === "welcome") {
-    console.log("Hello")
-    document.querySelector(".nav-extended").classList.add("hide-navbar")
-  } else {
-    document.querySelector(".nav-extended").classList.remove("hide-navbar")
-  }
-
-  if (activePage === "login") {
-    console.log("Hello")
+  if (activePage === "welcome" || activePage === "login") {
     document.querySelector(".nav-extended").classList.add("hide-navbar")
   } else {
     document.querySelector(".nav-extended").classList.remove("hide-navbar")
