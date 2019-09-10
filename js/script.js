@@ -50,7 +50,7 @@ function showPage(pageId, isTab) {
   activePage = pageId;
   hideAllPages();
 
-  // bip bip bup bup
+  // hide navbar if welcome or login page are active
   if (activePage === 'welcome' || activePage === 'login') {
     display = 'flex';
     document.querySelector(".nav-extended").classList.add("hide-navbar")
@@ -92,81 +92,143 @@ function setDefaultPage() {
 
 setDefaultPage();
 
-// RECIPES
+// ========== Firebase sign in functionality ========== //
 
-// function appendRecipes(recipes) {
-//   let htmlTemplate = "";
-//   for (let recipe of recipes) {
-//     console.log(recipe.id);
-//     console.log(recipe.data().title);
-//     htmlTemplate += `
-//       <div class="col s12 m6">
-//         <div class="card">
-//           <div class="card-image">
-//             <img src="${recipe.data().img}">
-//             <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-//               <i class="material-icons">favorite</i>
-//             </a>
-//           </div>
-//           <div class="card-content">
-//           <p>${recipe.data().time}</p>
-//             <span class="card-title">${recipe.data().title}</span>
-//             <ul>
-//               <li>${recipe.data().ingridients}</li>
-//             </ul>
-//             <p>${recipe.data().steps}</p>
-//           </div>
-//         </div>
-//       </div>
-//     `;
-//   }
-//   document.querySelector('#recipes-container').innerHTML = htmlTemplate;
-// }
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyAcZVFE2aDY5jyAvPGI3K0eD_y7ZcL0Wmo",
+  authDomain: "whats-in-your-fridge-59e9e.firebaseapp.com",
+  databaseURL: "https://whats-in-your-fridge-59e9e.firebaseio.com",
+  projectId: "whats-in-your-fridge-59e9e",
+  storageBucket: "whats-in-your-fridge-59e9e.appspot.com",
+  messagingSenderId: "510325509620",
+  appId: "1:510325509620:web:ccc332572aca6af57cbda1"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
-// facebook log in
-function statusChangeCallback(response) { // Called with the results from FB.getLoginStatus().
-  console.log('statusChangeCallback');
-  console.log(response); // The current login status of the person.
-  if (response.status === 'connected') { // Logged into your webpage and Facebook.
-    testAPI();
-  } else { // Not logged into your webpage or we are unable to tell.
-    document.getElementById('status').innerHTML = 'Please log ' +
-      'into this webpage.';
-  }
-}
+const db = firebase.firestore();
+const recipeRef = db.collection("recipes");
+console.log(recipeRef);
 
-function checkLoginState() { // Called when a person is finished with the Login Button.
-  FB.getLoginStatus(function(response) { // See the onlogin handler
-    statusChangeCallback(response);
-  });
-}
+// watch the database ref for changes
+recipeRef.onSnapshot(function(snapshotData) {
+  let recipes = snapshotData.docs;
+  appendRecipes(recipes);
+});
 
-window.fbAsyncInit = function() {
-  FB.init({
-    appId: '{502338947216772}',
-    cookie: true, // Enable cookies to allow the server to access the session.
-    xfbml: true, // Parse social plugins on this webpage.
-    version: '{v4.0.}' // Use this Graph API version for this call.
-  });
-
-  FB.getLoginStatus(function(response) { // Called after the JS SDK has been initialized.
-    statusChangeCallback(response); // Returns the login status.
-  });
+// Firebase UI configuration
+const uiConfig = {
+  credentialHelper: firebaseui.auth.CredentialHelper.NONE,
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+  ],
+  signInSuccessUrl: '#search',
 };
 
-(function(d, s, id) { // Load the SDK asynchronously
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://connect.facebook.net/en_US/sdk.js";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+// Init Firebase UI Authentication
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-function testAPI() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-  console.log('Welcome!  Fetching your information.... ');
-  FB.api('/me', function(response) {
-    console.log('Successful login for: ' + response.name);
+// // Listen on authentication state change
+// firebase.auth().onAuthStateChanged(function(user) {
+//   let tabbar = document.querySelector('#tabbar');
+//   // console.log(user);
+//   if (user) { // if user exists and is authenticated
+//     setDefaultPage('search');
+//     tabbar.classList.remove("hide");
+//   } else { // if user is not logged in
+//     // showPage("login");
+//     tabbar.classList.add("hide");
+//     ui.start('#firebaseui-auth-container', uiConfig);
+//   }
+// });
 
+// Google sign in
+function signInWithPopup() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  //  provider.addScope('https://www.googleapis.com/auth/plus.login');
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    var token = result.credential.accessToken;
+    var user = result.user;
+  }).catch(function(error) {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    var email = error.email;
+    var credential = error.credential;
   });
 }
+
+// Facebook sign in
+function facebook() {
+  var provider = new firebase.auth.FacebookAuthProvider();
+
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    // ...
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
+}
+
+// sign out user
+function logout() {
+  firebase.auth().signOut();
+}
+
+// RECIPES
+
+function appendRecipes(recipes) {
+  let htmlTemplate = "";
+  for (let recipe of recipes) {
+    console.log(recipe.data());
+    console.log(recipe.data().title);
+
+    htmlTemplate += `
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-image">
+            <img src="${recipe.data().img}">
+            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
+              <i class="material-icons">favorite</i>
+            </a>
+          </div>
+          <div class="card-content">
+          <p>${recipe.data().time}</p>
+            <span class="card-title">${recipe.data().title}</span>
+            <ul>
+              <li>${recipe.data().ingredients}</li>
+            </ul>
+            <p>${recipe.data().steps}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  document.querySelector('#recipes-container').innerHTML = htmlTemplate;
+}
+appendRecipes(recipes);
+
+
+// service firebase.storage {
+//   match / b / {
+//     bucket
+//   }
+//   /o {
+//   match / {
+//     allPaths = **
+//   } {
+//     allow read, write: if request.auth != null;
+//   }
+// }
+// }

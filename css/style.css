@@ -363,6 +363,38 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 
 /* END welcome page*/
 /* log in page*/
+#firebaseui-auth-container {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.firebaseui-container {
+  font-family: Helvetica, Arial, sans-serif;
+  font: 16px Helvetica, Arial, sans-serif;
+}
+
+.firebaseui-title {
+  text-align: center;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.mdl-button--raised.mdl-button--colored,
+.mdl-button--raised.mdl-button--colored:active,
+.mdl-button--raised.mdl-button--colored:hover {
+  background: rgb(172, 198, 201);
+  color: #fff;
+  border-radius: 0;
+}
+
+.firebaseui-textfield.mdl-textfield .firebaseui-label::after {
+  background-color: rgb(172, 198, 201);
+}
+
 .login {
   background: #F28D17;
   text-align: center;

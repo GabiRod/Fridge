@@ -88,11 +88,10 @@
   <!--  log in page -->
   <section id="login" class="page col s12 login">
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
+    <div id="firebaseui-auth-container">
+    </div>
     <p>Find recipes from the ingredients that you already have at home!</p>
     <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH GOOGLE</a>
-    <a>
-      <fb:login-button scope="public_profile,email" onclick="checkLoginState();">LOG IN WITH FACEBOOK</fb:login-button>
-    </a>
     <br>
     <br>
     <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH FACEBOOK</a>
@@ -116,18 +115,20 @@
       </div>
 
       <!-- card -->
-      <div class="row">
-        <div class="col s12 m6">
-          <div class="card">
-            <div class="card-image">
-              <img src="img/pancakes.jpg" max-width="282" height="187">
-              <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-                <i class="material-icons">favorite</i>
-              </a>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Pancakes</span>
-              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+      <div id="recipes-container">
+        <div class="row">
+          <div class="col s12 m6">
+            <div class="card">
+              <div class="card-image">
+                <img src="img/pancakes.jpg" max-width="282" height="187">
+                <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
+                  <i class="material-icons">favorite</i>
+                </a>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Pancakes</span>
+                <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -191,7 +192,6 @@
       </div>
 
       <!-- card -->
-      <!-- <div class="row" id="recipes-container"> -->
       <div class="row">
         <div class="col s12 m6">
           <div class="card">
@@ -273,9 +273,15 @@
 
 
   </footer>
-
-  <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-app.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-firestore.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+  <!-- Compiled and minified JavaScript -->
+
   <script src="js/script.js"></script>
 </body>
 
