@@ -1,3 +1,4 @@
+
 /* PRESET */
 html {
   font-family: 'Roboto', sans-serif;
@@ -264,7 +265,6 @@ nav .brand-logo {
 }
 
 .log-out-li {
-  margin-top: ;
   margin-bottom: auto;
 }
 
@@ -283,10 +283,6 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   text-align: center;
 }
 
-.card {
-  text-align: left;
-}
-
 #profile-photo-button {
   top: 0px;
   right: 14px;
@@ -298,6 +294,26 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 .logo-img {
   width: 35px;
   height: auto;
+}
+
+.card {
+  text-align: left;
+}
+
+.card img {
+  height: 280px;
+    object-fit: cover;
+}
+
+.card .time {
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  background-color: white;
+  border-radius: 50%;
+  padding: 0.3rem 0.45rem;
+  font-size: 1.2rem;
+  box-shadow: 0 3px 6px -4px #5b5a5a;
 }
 
 /* end of the search page */
@@ -363,38 +379,6 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 
 /* END welcome page*/
 /* log in page*/
-#firebaseui-auth-container {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-}
-
-.firebaseui-container {
-  font-family: Helvetica, Arial, sans-serif;
-  font: 16px Helvetica, Arial, sans-serif;
-}
-
-.firebaseui-title {
-  text-align: center;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.mdl-button--raised.mdl-button--colored,
-.mdl-button--raised.mdl-button--colored:active,
-.mdl-button--raised.mdl-button--colored:hover {
-  background: rgb(172, 198, 201);
-  color: #fff;
-  border-radius: 0;
-}
-
-.firebaseui-textfield.mdl-textfield .firebaseui-label::after {
-  background-color: rgb(172, 198, 201);
-}
-
 .login {
   background: #F28D17;
   text-align: center;

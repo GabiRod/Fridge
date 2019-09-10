@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css?family=Neucha&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
   <link rel="stylesheet" href="css/style.css">
   <title>What's in your fridge</title>
 </head>
@@ -50,7 +51,7 @@
           </a>
           <ul id="log-out-ul">
             <li class="log-out-li">
-              <a class="btn-floating white log-out">
+              <a class="btn-floating white log-out" onclick="logout()">
                 <i class="material-icons log-out-icon">exit_to_app</i>
               </a>
             </li>
@@ -80,7 +81,8 @@
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
 
     <p>Find recipes from the ingredients that you already have at home!</p>
-    <a href="#search" onclick="showPage('search', true)" class="waves-effect waves-light btn firstBtn radius">LET'S COOK</a>
+    <a href="#search" onclick="showPage('search', true)" class="waves-effect waves-light btn firstBtn radius">LET'S
+      COOK</a>
 
     <a href="#login" onclick="showPage('login')" class="link">LOG IN</a>
   </section>
@@ -88,14 +90,9 @@
   <!--  log in page -->
   <section id="login" class="page col s12 login">
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
+    <p>Find recipes from the ingredients that you already have at home!</p>
     <div id="firebaseui-auth-container">
     </div>
-    <p>Find recipes from the ingredients that you already have at home!</p>
-    <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH GOOGLE</a>
-    <br>
-    <br>
-    <a class="waves-effect waves-light btn firstBtn radius login-width">LOG IN WITH FACEBOOK</a>
-    <br>
   </section>
 
   <!-- home page to search ingredients -->
@@ -105,7 +102,7 @@
         <form class="col s12">
           <div class="row">
             <div class="input-field col s11">
-              <input onkeyup="search(this.value)" id="icon_prefix2" class="materialize-input" placeholder="Type your ingredient"></input>
+              <input onkeyup="search(this.value)" class="materialize-input" placeholder="Type your ingredient"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -115,29 +112,12 @@
       </div>
 
       <!-- card -->
-      <div id="recipes-container">
-        <div class="row">
-          <div class="col s12 m6">
-            <div class="card">
-              <div class="card-image">
-                <img src="img/pancakes.jpg" max-width="282" height="187">
-                <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-                  <i class="material-icons">favorite</i>
-                </a>
-              </div>
-              <div class="card-content">
-                <span class="card-title">Pancakes</span>
-                <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div id="recipes-container" class="row">
       </div>
       <!-- card  ends -->
     </div>
   </section>
   <!-- end of search page -->
-
   <!-- favourites page -->
   <section id="favourites" class="page col s12">
     <div class="container">
@@ -145,7 +125,7 @@
         <form class="col s12">
           <div class="row">
             <div class="input-field col s11">
-              <input onkeyup="search(this.value)" id="icon_prefix2" class="materialize-input" placeholder="Type your recipe"></input>
+              <input onkeyup="search(this.value)" class="materialize-input" placeholder="Type your recipe"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -166,7 +146,8 @@
             </div>
             <div class="card-content">
               <span class="card-title">Pancakes</span>
-              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I
+                require little markup to use effectively.</p>
             </div>
           </div>
         </div>
@@ -182,7 +163,7 @@
         <form class="col s12">
           <div class="row">
             <div class="input-field col s11">
-              <input onkeyup="search(this.value)" id="icon_prefix2" class="materialize-input" placeholder="Type your recipe"></input>
+              <input onkeyup="search(this.value)" class="materialize-input" placeholder="Type your recipe"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -203,7 +184,8 @@
             </div>
             <div class="card-content">
               <span class="card-title">Pancakes</span>
-              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
+              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I
+                require little markup to use effectively.</p>
             </div>
           </div>
         </div>

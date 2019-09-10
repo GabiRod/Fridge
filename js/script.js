@@ -5,8 +5,8 @@ let activePage = "welcome";
 // initialize the plugin navbar
 const tabs = document.querySelector("#tabs")
 const tabsInstance = M.Tabs.init(tabs, {
-  onShow: function(sectionElement) {
-    console.log(sectionElement.id);
+  onShow: function (sectionElement) {
+    // console.log(sectionElement.id);
 
     location.href = `#${sectionElement.id}`;
     activePage = sectionElement.id;
@@ -14,7 +14,7 @@ const tabsInstance = M.Tabs.init(tabs, {
 });
 
 // initialize the floating button
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   let elems = document.querySelectorAll('.fixed-action-btn');
   let instances = M.FloatingActionButton.init(elems, {
     direction: 'left',
@@ -109,11 +109,12 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 const recipeRef = db.collection("recipes");
-console.log(recipeRef);
+// console.log(recipeRef);
 
 // watch the database ref for changes
-recipeRef.onSnapshot(function(snapshotData) {
+recipeRef.onSnapshot(function (snapshotData) {
   let recipes = snapshotData.docs;
+  // console.log(snapshotData);
   appendRecipes(recipes);
 });
 
@@ -130,72 +131,81 @@ const uiConfig = {
 // Init Firebase UI Authentication
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-// // Listen on authentication state change
-// firebase.auth().onAuthStateChanged(function(user) {
-//   let tabbar = document.querySelector('#tabbar');
-//   // console.log(user);
-//   if (user) { // if user exists and is authenticated
-//     setDefaultPage('search');
-//     tabbar.classList.remove("hide");
-//   } else { // if user is not logged in
-//     // showPage("login");
-//     tabbar.classList.add("hide");
-//     ui.start('#firebaseui-auth-container', uiConfig);
-//   }
-// });
+// Listen on authentication state change
+firebase.auth().onAuthStateChanged(function (user) {
+  // let tabbar = document.querySelector('#tabbar');
+  // console.log(user);
+  if (user) { // if user exists and is authenticated
+    setDefaultPage('search');
+    //  tabbar.classList.remove("hide");
+  } else { // if user is not logged in
+    // showPage("login");
+    // tabbar.classList.add("hide");
+    ui.start('#firebaseui-auth-container', uiConfig);
+  }
+});
 
-// Google sign in
-function signInWithPopup() {
-  var provider = new firebase.auth.GoogleAuthProvider();
-  //  provider.addScope('https://www.googleapis.com/auth/plus.login');
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-    var token = result.credential.accessToken;
-    var user = result.user;
-  }).catch(function(error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    var email = error.email;
-    var credential = error.credential;
-  });
-}
+// // Google sign in
+// function signInWithPopup() {
+//   var provider = new firebase.auth.GoogleAuthProvider();
+//   //  provider.addScope('https://www.googleapis.com/auth/plus.login');
+//   firebase.auth().signInWithPopup(provider).then(function (result) {
+//     var token = result.credential.accessToken;
+//     var user = result.user;
+//   }).catch(function (error) {
+//     var errorCode = error.code;
+//     var errorMessage = error.message;
+//     var email = error.email;
+//     var credential = error.credential;
+//   });
+// }
 
-// Facebook sign in
-function facebook() {
-  var provider = new firebase.auth.FacebookAuthProvider();
+// // Facebook sign in
+// function facebook() {
+//   var provider = new firebase.auth.FacebookAuthProvider();
 
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    // ...
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-  });
-}
+//   firebase.auth().signInWithPopup(provider).then(function (result) {
+//     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+//     var token = result.credential.accessToken;
+//     // The signed-in user info.
+//     var user = result.user;
+//     // ...
+//   }).catch(function (error) {
+//     // Handle Errors here.
+//     var errorCode = error.code;
+//     var errorMessage = error.message;
+//     // The email of the user's account used.
+//     var email = error.email;
+//     // The firebase.auth.AuthCredential type that was used.
+//     var credential = error.credential;
+//     // ...
+//   });
+// }
 
 // sign out user
 function logout() {
-  firebase.auth().signOut();
+
+  //firebase.auth().signOut();
+  firebase.auth().signOut().then(function () {
+
+    // Sign-out successful.
+    console.log("Succes sign out");
+  }).catch(function (error) {
+
+    // An error happened.
+    console.log("Error sign out");
+  });
 }
 
 // RECIPES
-
 function appendRecipes(recipes) {
   let htmlTemplate = "";
   for (let recipe of recipes) {
-    console.log(recipe.data());
-    console.log(recipe.data().title);
+    // console.log(recipe.data());
+    // console.log(recipe.data().title);
 
     htmlTemplate += `
-      <div class="col s12 m6">
+      <div class="col s12 m6 l4">
         <div class="card">
           <div class="card-image">
             <img src="${recipe.data().img}">
@@ -204,12 +214,11 @@ function appendRecipes(recipes) {
             </a>
           </div>
           <div class="card-content">
-          <p>${recipe.data().time}</p>
+          <p class="time">${recipe.data().time}'</p>
             <span class="card-title">${recipe.data().title}</span>
             <ul>
               <li>${recipe.data().ingredients}</li>
             </ul>
-            <p>${recipe.data().steps}</p>
           </div>
         </div>
       </div>
@@ -217,18 +226,23 @@ function appendRecipes(recipes) {
   }
   document.querySelector('#recipes-container').innerHTML = htmlTemplate;
 }
-appendRecipes(recipes);
 
-
-// service firebase.storage {
-//   match / b / {
-//     bucket
-//   }
-//   /o {
-//   match / {
-//     allPaths = **
-//   } {
-//     allow read, write: if request.auth != null;
-//   }
-// }
-// }
+// for recipe itself
+/* <div class="col s12 m6 l4">
+  <div class="card">
+    <div class="card-image">
+      <img src="${recipe.data().img}">
+        <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
+          <i class="material-icons">favorite</i>
+        </a>
+    </div>
+    <div class="card-content">
+      <p>${recipe.data().time}</p>
+      <span class="card-title">${recipe.data().title}</span>
+      <ul>
+        <li>${recipe.data().ingredients}</li>
+      </ul>
+      <p>${recipe.data().steps}</p>
+    </div>
+  </div>
+</div> */
