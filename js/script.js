@@ -109,6 +109,7 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 const recipeRef = db.collection("recipes");
+const ingredientRef = db.collection("ingredients");
 // console.log(recipeRef);
 
 // watch the database ref for changes
@@ -246,3 +247,9 @@ function appendRecipes(recipes) {
     </div>
   </div>
 </div> */
+
+// searcrh function
+
+// function search() {
+
+// }
