@@ -45,8 +45,7 @@
         <!-- floating log in -->
         <div id="profile-photo-button" class="fixed-action-btn nav">
           <a class="btn-floating btn-medium white">
-            <img class="profile-photo"
-              src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
+            <img class="profile-photo" src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
               alt="Profile photo">
           </a>
           <ul id="log-out-ul">
@@ -65,7 +64,7 @@
         <ul id="tabs" class="tabs tabs-transparent">
           <li class="tab"><a href="#search">Search</a></li>
           <li class="tab"><a href="#favourites">Favourites</a></li>
-          <li class="tab"><a href="#recipes">Recipes</a></li>
+          <li class="tab"><a href="#recipes">My Recipes</a></li>
         </ul>
       </div>
       <!-- end of desktop navigation -->
@@ -79,19 +78,48 @@
     <h2> WELCOME! </h2>
     <p>No More Food Waste</p>
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
-
     <p>Find recipes from the ingredients that you already have at home!</p>
-    <a href="#search" onclick="showPage('search', true)" class="waves-effect waves-light btn firstBtn radius">LET'S
-      COOK</a>
-
+    <a href="#search" onclick="showPage('search', true)" class="waves-effect waves-light btn firstBtn radius">LET'SCOOK</a>
     <a href="#login" onclick="showPage('login')" class="link">LOG IN</a>
   </section>
 
   <!--  log in page -->
   <section id="login" class="page col s12 login">
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
-    <p>Find recipes from the ingredients that you already have at home!</p>
+    <p>Log in to enjoy your favourite recipes and add your own!</p>
     <div id="firebaseui-auth-container">
+    </div>
+  </section>
+
+  <!-- recipe page -->
+  <section id="recipe" class="page col s12 recipe-page">
+    <div class="recipe-container">
+      <h1 class="recipe-title">Title</h1>
+      <div class="card-image" id="recipe-card-img">
+        <img src="img/pancakes.jpg">
+        <p class="time">30'</p>
+        <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="favourite()"><i class="material-icons">favorite</i></a>
+      </div>
+      <!-- <img src="img/pancakes.jpg" alt="pancakes">
+
+      <a class="btn-floating halfway-fab waves-effect waves-light" onclick="favourite()">
+        <i class="material-icons">favorite</i>
+      </a> -->
+      <h2>Ingredients</h2>
+      <ul class="recipe-ingredients">
+        <li class="recipe-ingredient">banana</li>
+        <li class="recipe-ingredient">milk</li>
+        <li class="recipe-ingredient">flour</li>
+      </ul>
+      <h2>Steps</h2>
+      <div class="recipe-steps">
+        <p class="recipe-step">Step 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec convallis lorem risus, ut
+          egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec commodo imperdiet nulla non eleifend.</p>
+        <p class="recipe-step">Step 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec convallis lorem risus, ut
+          egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec commodo imperdiet nulla non eleifend.</p>
+        <p class="recipe-step">Step 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec convallis lorem risus, ut
+          egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec commodo imperdiet nulla non eleifend.</p>
+      </div>
     </div>
   </section>
 
@@ -99,17 +127,21 @@
   <section id="search" class="page col s12">
     <div class="container">
       <div class="row">
-        <form class="col s12">
+        <div class="col s12">
           <div class="row">
-            <div class="input-field col s11">
-              <input onkeyup="search(this.value)" class="materialize-input" placeholder="Type your ingredient"></input>
+            <div class="input-field col s12">
+              <input type="text" id="autocomplete-input" class="autocomplete" placeholder="Type your ingredient"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
-        </form>
+        </div>
+        <div class="container" id="response">
+
+        </div>
         <!-- button show recipes -->
         <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
       </div>
+
 
       <!-- card -->
       <div id="recipes-container" class="row">
@@ -135,28 +167,13 @@
       </div>
 
       <!-- card -->
-      <div class="row">
-        <div class="col s12 m6">
-          <div class="card">
-            <div class="card-image">
-              <img src="img/pancakes.jpg" max-width="282" height="187">
-              <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-                <i class="material-icons">favorite</i>
-              </a>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Pancakes</span>
-              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I
-                require little markup to use effectively.</p>
-            </div>
-          </div>
-        </div>
+      <div id="recipes-container" class="row">
       </div>
       <!-- card  ends -->
     </div>
   </section>
 
-  <!-- recipes page -->
+  <!-- my recipes page -->
   <section id="recipes" class="page col s12">
     <div class="container">
       <div class="row">
@@ -173,29 +190,14 @@
       </div>
 
       <!-- card -->
-      <div class="row">
-        <div class="col s12 m6">
-          <div class="card">
-            <div class="card-image">
-              <img src="img/pancakes.jpg" max-width="282" height="187">
-              <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-                <i class="material-icons">favorite</i>
-              </a>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Pancakes</span>
-              <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I
-                require little markup to use effectively.</p>
-            </div>
-          </div>
-        </div>
+      <div id="recipes-container" class="row">
       </div>
       <!-- card  ends -->
     </div>
     <!-- add recipe as a floating button -->
-    <div class="fixed-action-btn">
+    <div class="fixed-action-btn plus">
       <a href="#popup1" class="btn-floating btn-large add">
-        <i class="large material-icons">add</i>
+        <i class="large material-icons waves-effect">add</i>
       </a>
     </div>
   </section>
@@ -203,36 +205,50 @@
   <!-- pop up- Add new recipe -->
   <div id="popup1" class="overlay">
     <div class="popup">
-      <h2>Add your own recipe</h2>
+
       <a class="close" href="#">&times;</a>
-      <div class="content">
+      <div class="content add-new-recipe">
+        <h1>Add your own recipe</h1>
         <div class="row">
           <form class="col s12">
             <div class="row">
               <div class="input-field col s12">
-                <input placeholder="Type the title" id="title" type="text" class="validate">
-                <label for="title">Title of your recipe</label>
+                <input placeholder="Type the name of the recipe" id="title" type="text" class="validate">
               </div>
             </div>
+
             <div class="row">
               <div class="file-field input-field" action="#">
-                <div class="btn waves-effect waves-light btn radius">
+                <div class="btn waves-effect waves-light btn radius small-button">
+                  <input type="file" class="small-button">
                   <span>Image </span>
-                  <input type="file">
                 </div>
                 <div class="file-path-wrapper">
                   <input class="file-path validate" type="text">
-
                 </div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="input-field col s12">
-                <input id="password" type="password" class="validate">
-                <label for="password">Password</label>
+
+            <div class="input-field col s12">
+              <input placeholder="Type the ingredients" id="ingredient" type="text" class="validate">
+            </div>
+
+            <div class="input-field col s12">
+              <input type="text" id="steps" placeholder="Type the first step of the recipe" required="">
+            </div>
+
+            <div class="input-field col s12">
+              <div class="policko">
+
               </div>
             </div>
+
+            <button class="waves-effect waves-light btn radius" type="button" name="button" onclick="addStep()">Add step</button>
+            <br>
+            <br>
+            <button class="waves-effect waves-light btn radius " type="button" name="button" onclick="newRecipe()">Add your recipe</button>
+
           </form>
         </div>
       </div>

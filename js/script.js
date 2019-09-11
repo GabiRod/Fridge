@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+//
 // function showLoader(show) {
 //   let loader = document.querySelector('#cooking');
 //   if (show) {
@@ -30,10 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //     loader.classList.add("hide");
 //   }
 // }
-//
-// setTimeout(function() {
-//   showLoader(false);
-// }, 900);
+
 
 // hide all pages
 function hideAllPages() {
@@ -64,6 +62,10 @@ function showPage(pageId, isTab) {
   if (isTab) {
     tabsInstance.select(pageId);
   }
+  // setTimeout(function() {
+  //   showLoader(false);
+  // }, 900);
+
 };
 
 // sets active tabbar/ menu item
@@ -85,6 +87,7 @@ function setDefaultPage() {
 
   if (location.hash) {
     page = location.hash.slice(1);
+
   }
 
   showPage(page);
@@ -110,13 +113,19 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const recipeRef = db.collection("recipes");
 const ingredientRef = db.collection("ingredients");
-// console.log(recipeRef);
+
 
 // watch the database ref for changes
 recipeRef.onSnapshot(function(snapshotData) {
   let recipes = snapshotData.docs;
   // console.log(snapshotData);
   appendRecipes(recipes);
+});
+// ingredients
+ingredientRef.onSnapshot(function(snapshotData) {
+  let ingredients = snapshotData.docs;
+  // console.log(snapshotData);
+  appendIngredients(ingredients);
 });
 
 // Firebase UI configuration
@@ -137,51 +146,16 @@ firebase.auth().onAuthStateChanged(function(user) {
   // let tabbar = document.querySelector('#tabbar');
   // console.log(user);
   if (user) { // if user exists and is authenticated
+
     setDefaultPage('search');
     //  tabbar.classList.remove("hide");
   } else { // if user is not logged in
     // showPage("login");
     // tabbar.classList.add("hide");
+
     ui.start('#firebaseui-auth-container', uiConfig);
   }
 });
-
-// // Google sign in
-// function signInWithPopup() {
-//   var provider = new firebase.auth.GoogleAuthProvider();
-//   //  provider.addScope('https://www.googleapis.com/auth/plus.login');
-//   firebase.auth().signInWithPopup(provider).then(function (result) {
-//     var token = result.credential.accessToken;
-//     var user = result.user;
-//   }).catch(function (error) {
-//     var errorCode = error.code;
-//     var errorMessage = error.message;
-//     var email = error.email;
-//     var credential = error.credential;
-//   });
-// }
-
-// // Facebook sign in
-// function facebook() {
-//   var provider = new firebase.auth.FacebookAuthProvider();
-
-//   firebase.auth().signInWithPopup(provider).then(function (result) {
-//     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-//     var token = result.credential.accessToken;
-//     // The signed-in user info.
-//     var user = result.user;
-//     // ...
-//   }).catch(function (error) {
-//     // Handle Errors here.
-//     var errorCode = error.code;
-//     var errorMessage = error.message;
-//     // The email of the user's account used.
-//     var email = error.email;
-//     // The firebase.auth.AuthCredential type that was used.
-//     var credential = error.credential;
-//     // ...
-//   });
-// }
 
 // sign out user
 function logout() {
@@ -198,7 +172,12 @@ function logout() {
   });
 }
 
+
+
 // RECIPES
+
+console.log("user is log in");
+
 function appendRecipes(recipes) {
   let htmlTemplate = "";
   for (let recipe of recipes) {
@@ -248,8 +227,65 @@ function appendRecipes(recipes) {
   </div>
 </div> */
 
-// searcrh function
+// search function
+function appendIngredients(ingredients) {
+  let htmlTemplate = "";
+  for (let ingredient of ingredients) {
+    console.log(ingredient.data().name);
+    htmlTemplate = `
+    <ul>
+      <li>${ingredient.data().name}</li>
+    </ul>
+    `;
+  }
+  document.querySelector('.autocomplete').innerHTML = htmlTemplate;
+
+}
+
+// initialize autocomplete search
+document.addEventListener('DOMContentLoaded', function() {
+  let options = {
+    data: {
+      "Apple": null,
+      "Microsoft": null,
+      "Google": 'https://placehold.it/250x250'
+    },
+    onAutocomplete: function(text) {
+      response.innerHTML = '<h3>helloo:</h3>'
+    }
+  }
+  let elems = document.querySelectorAll('.autocomplete');
+  let instances = M.Autocomplete.init(elems, options);
+});
+
+let response = document.getElementById('response');
+
 
 // function search() {
 
 // }
+
+
+function addStep() {
+  let htmlTemplate = "";
+  htmlTemplate = `
+    <input id="step" placeholder="Type another step of the recipe">`;
+  console.log(htmlTemplate);
+  document.querySelector('.policko').innerHTML += htmlTemplate;
+};
+
+//POP UP - NEW RECIPE
+function newRecipe() {
+  // references to the input fields
+  let titleInput = document.querySelector('#title');
+  let pictureInput = document.querySelector('#mail');
+  console.log(titleInput.value);
+  console.log(pictureInput.value);
+
+  let newUser = {
+    title: titleInput.value,
+    picture: pictureInput.value
+  };
+
+  recipeRef.add(newRecipe);
+}
