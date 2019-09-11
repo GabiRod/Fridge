@@ -5,7 +5,7 @@ let activePage = "welcome";
 // initialize the plugin navbar
 const tabs = document.querySelector("#tabs")
 const tabsInstance = M.Tabs.init(tabs, {
-  onShow: function (sectionElement) {
+  onShow: function(sectionElement) {
     // console.log(sectionElement.id);
 
     location.href = `#${sectionElement.id}`;
@@ -14,7 +14,7 @@ const tabsInstance = M.Tabs.init(tabs, {
 });
 
 // initialize the floating button
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   let elems = document.querySelectorAll('.fixed-action-btn');
   let instances = M.FloatingActionButton.init(elems, {
     direction: 'left',
@@ -113,7 +113,7 @@ const ingredientRef = db.collection("ingredients");
 // console.log(recipeRef);
 
 // watch the database ref for changes
-recipeRef.onSnapshot(function (snapshotData) {
+recipeRef.onSnapshot(function(snapshotData) {
   let recipes = snapshotData.docs;
   // console.log(snapshotData);
   appendRecipes(recipes);
@@ -133,7 +133,7 @@ const uiConfig = {
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 // Listen on authentication state change
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
   // let tabbar = document.querySelector('#tabbar');
   // console.log(user);
   if (user) { // if user exists and is authenticated
@@ -187,11 +187,11 @@ firebase.auth().onAuthStateChanged(function (user) {
 function logout() {
 
   //firebase.auth().signOut();
-  firebase.auth().signOut().then(function () {
+  firebase.auth().signOut().then(function() {
 
     // Sign-out successful.
     console.log("Succes sign out");
-  }).catch(function (error) {
+  }).catch(function(error) {
 
     // An error happened.
     console.log("Error sign out");
