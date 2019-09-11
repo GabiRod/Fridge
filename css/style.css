@@ -1,3 +1,8 @@
+/* ---------- root variables ---------- */
+:root {
+  --orange: rgb(241, 139, 23);
+}
+
 /* PRESET */
 html {
   font-family: 'Roboto', sans-serif;
@@ -19,7 +24,7 @@ p {
 /* LOADER */
 /* @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
 body {
-  background-color: #f28d17;
+  background-color: var(--orange);
   height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -244,23 +249,37 @@ body {
   display: none;
 }
 
-nav .brand-logo {
+.nav-extended {
+  background-color: var(--orange);
+}
+
+.nav-extended .brand-logo {
   top: 7px;
   left: 19px;
   transform: translateX(0);
   -webkit-transform: translateX(0);
 }
 
-.nav-extended {
-  background-color: #F28D17;
-}
-
-.profile-photo {
+.nav-extended .profile-photo {
   width: 100%;
   height: auto;
 }
 
-#log-out-ul {
+.nav-extended .fixed-action-btn.direction-left ul, .nav-extended .fixed-action-btn.direction-right ul {
+  left: -55px;
+  width: 40px;
+}
+
+.nav-extended ul a.btn, .nav-extended ul a.btn-large, .nav-extended ul a.btn-small, .nav-extended ul a.btn-large, .nav-extended ul a.btn-flat, .nav-extended ul a.btn-floating {
+  margin: 0;
+}
+
+.nav-extended .fixed-action-btn.direction-left ul li, .nav-extended .fixed-action-btn.direction-right ul li {
+  margin: 3px 0 0 0;
+}
+
+
+/* #log-out-ul {
   width: 100%;
 }
 
@@ -271,7 +290,7 @@ nav .brand-logo {
 .log-out {
   width: 38px;
   height: 38px;
-}
+} */
 
 nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-small>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-flat>.material-icons, nav ul a.btn-floating>.material-icons {
   color: black;
@@ -294,6 +313,15 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 .logo-img {
   width: 35px;
   height: auto;
+}
+
+.search-page .input-field .prefix {
+  position: static;
+}
+
+.search-page .input-field {
+  display: flex;
+  align-items: center;
 }
 
 .card {
@@ -319,13 +347,13 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 /* end of the search page */
 /* BUTTON */
 .radius {
-  background-color: #F28D17;
+  background-color: var(--orange);
   border-radius: 8px;
   text-align: center;
 }
 
 .waves-effect {
-  background-color: #F28D17;
+  background-color: var(--orange);
 }
 
 .waves-effect:hover {
@@ -336,7 +364,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 /*welcome page*/
 /* ===========================================> not responsive */
 .welcome {
-  background: #F28D17;
+  background: var(--orange);
   text-align: center;
   height: 100vh;
   padding: 2rem 20px;
@@ -363,7 +391,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 .firstBtn {
   background-color: white;
   width: 250px;
-  color: #F28D17;
+  color: var(--orange);
 }
 
 .link {
@@ -380,7 +408,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 /* END welcome page*/
 /* log in page*/
 .login {
-  background: #F28D17;
+  background: var(--orange);
   text-align: center;
   color: white;
   padding: 1rem 20px;
@@ -454,7 +482,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 /* END OF RECIPES */
 /* start of recipe */
 .recipe-page {
-  padding: 0 20px;
+  padding: 0 20px 40px 20px;
 }
 
 .recipe-container {
@@ -506,6 +534,37 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 
 .recipe-container .recipe-step {
   padding: 10px 20px;
+}
+
+.recipe-page .recipe-back-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: black;
+    width: 130px;
+    margin-top: 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 701px) {
+  .recipe-page {
+    margin: 0 5%;
+    padding-bottom: 100px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .recipe-page {
+    margin: 0 10%;
+  }
+}
+
+@media only screen and (min-width: 1615px) {
+  .recipe-page {
+    margin: 0 20%;
+  }
 }
 
 /* end of recipe */

@@ -5,7 +5,7 @@ let activePage = "welcome";
 // initialize the plugin navbar
 const tabs = document.querySelector("#tabs")
 const tabsInstance = M.Tabs.init(tabs, {
-  onShow: function(sectionElement) {
+  onShow: function (sectionElement) {
     // console.log(sectionElement.id);
 
     location.href = `#${sectionElement.id}`;
@@ -14,7 +14,7 @@ const tabsInstance = M.Tabs.init(tabs, {
 });
 
 // initialize the floating button
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   let elems = document.querySelectorAll('.fixed-action-btn');
   let instances = M.FloatingActionButton.init(elems, {
     direction: 'left',
@@ -98,7 +98,7 @@ setDefaultPage();
 // ========== Firebase sign in functionality ========== //
 
 // Your web app's Firebase configuration
-var firebaseConfig = {
+let firebaseConfig = {
   apiKey: "AIzaSyAcZVFE2aDY5jyAvPGI3K0eD_y7ZcL0Wmo",
   authDomain: "whats-in-your-fridge-59e9e.firebaseapp.com",
   databaseURL: "https://whats-in-your-fridge-59e9e.firebaseio.com",
@@ -113,16 +113,17 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const recipeRef = db.collection("recipes");
 const ingredientRef = db.collection("ingredients");
-
+let allRecipes = {};
 
 // watch the database ref for changes
-recipeRef.onSnapshot(function(snapshotData) {
+recipeRef.onSnapshot(function (snapshotData) {
   let recipes = snapshotData.docs;
+  allRecipes = recipes;
   // console.log(snapshotData);
   appendRecipes(recipes);
 });
 // ingredients
-ingredientRef.onSnapshot(function(snapshotData) {
+ingredientRef.onSnapshot(function (snapshotData) {
   let ingredients = snapshotData.docs;
   // console.log(snapshotData);
   appendIngredients(ingredients);
@@ -142,7 +143,7 @@ const uiConfig = {
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 // Listen on authentication state change
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
   // let tabbar = document.querySelector('#tabbar');
   // console.log(user);
   if (user) { // if user exists and is authenticated
@@ -161,11 +162,11 @@ firebase.auth().onAuthStateChanged(function(user) {
 function logout() {
 
   //firebase.auth().signOut();
-  firebase.auth().signOut().then(function() {
+  firebase.auth().signOut().then(function () {
 
     // Sign-out successful.
     console.log("Succes sign out");
-  }).catch(function(error) {
+  }).catch(function (error) {
 
     // An error happened.
     console.log("Error sign out");
@@ -181,9 +182,6 @@ console.log("user is log in");
 function appendRecipes(recipes) {
   let htmlTemplate = "";
   for (let recipe of recipes) {
-    // console.log(recipe.data());
-    // console.log(recipe.data().title);
-
     htmlTemplate += `
       <div class="col s12 m6 l4">
         <div class="card">
@@ -199,39 +197,53 @@ function appendRecipes(recipes) {
             <ul>
               <li>${recipe.data().ingredients}</li>
             </ul>
+            <a class="waves-effect waves-light btn radius" onclick="openRecipe('${recipe.id}')">OPEN RECIPE</a>
           </div>
         </div>
       </div>
     `;
   }
   document.querySelector('#recipes-container').innerHTML = htmlTemplate;
+  console.log(recipes);
 }
 
-// for recipe itself
-/* <div class="col s12 m6 l4">
-  <div class="card">
-    <div class="card-image">
+function openRecipe(id) {
+  const recipe = allRecipes.find(r => r.id === id);
+  console.log(recipe);
+  let htmlTemplate = "";
+  let steps = recipe.data().steps.map(step => {
+    console.log(step);
+    return `<p class="recipe-step">${step}</p>`
+  })
+
+  htmlTemplate = `
+  <div>
+    <h1 class="recipe-title">${recipe.data().title}</h1>
+    <div class="card-image" id="recipe-card-img">
       <img src="${recipe.data().img}">
-        <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-          <i class="material-icons">favorite</i>
-        </a>
+      <p class="time">${recipe.data().time}'</p>
+      <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="favourite()"><i
+          class="material-icons">favorite</i></a>
     </div>
-    <div class="card-content">
-      <p>${recipe.data().time}</p>
-      <span class="card-title">${recipe.data().title}</span>
-      <ul>
-        <li>${recipe.data().ingredients}</li>
-      </ul>
-      <p>${recipe.data().steps}</p>
-    </div>
+    <h2>Ingredients</h2>
+    <ul class="recipe-ingredients">
+      <li class="recipe-ingredient">${recipe.data().ingredients}</li>
+    </ul>
+    <h2>Steps</h2>
+    <div class="recipe-steps">${steps}</div>
   </div>
-</div> */
+  `;
+
+  document.querySelector('#recipe-page-container').innerHTML = htmlTemplate;
+
+  showPage("recipe");
+}
 
 // search function
 function appendIngredients(ingredients) {
   let htmlTemplate = "";
   for (let ingredient of ingredients) {
-    console.log(ingredient.data().name);
+    // console.log(ingredient.data().name);
     htmlTemplate = `
     <ul>
       <li>${ingredient.data().name}</li>
@@ -243,14 +255,14 @@ function appendIngredients(ingredients) {
 }
 
 // initialize autocomplete search
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   let options = {
     data: {
       "Apple": null,
       "Microsoft": null,
       "Google": 'https://placehold.it/250x250'
     },
-    onAutocomplete: function(text) {
+    onAutocomplete: function (text) {
       response.innerHTML = '<h3>helloo:</h3>'
     }
   }

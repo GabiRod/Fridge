@@ -38,20 +38,21 @@
     <!-- Navigation -->
     <nav class="nav-extended">
       <div class="nav-wrapper">
-        <a href="#search" onclick="showPage('search')" class="brand-logo">
+        <a href="#search" onclick="showPage('search', true)" class="brand-logo">
           <img src="img/whatsinyourfridge.png" class="logo-img" alt="logo">
         </a>
 
         <!-- floating log in -->
         <div id="profile-photo-button" class="fixed-action-btn nav">
           <a class="btn-floating btn-medium white">
-            <img class="profile-photo" src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
+            <img class="profile-photo"
+              src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
               alt="Profile photo">
           </a>
-          <ul id="log-out-ul">
-            <li class="log-out-li">
-              <a class="btn-floating white log-out" onclick="logout()">
-                <i class="material-icons log-out-icon">exit_to_app</i>
+          <ul>
+            <li>
+              <a class="btn-floating white" onclick="logout()">
+                <i class="material-icons">exit_to_app</i>
               </a>
             </li>
           </ul>
@@ -79,7 +80,8 @@
     <p>No More Food Waste</p>
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
     <p>Find recipes from the ingredients that you already have at home!</p>
-    <a href="#search" onclick="showPage('search', true)" class="waves-effect waves-light btn firstBtn radius">LET'SCOOK</a>
+    <a href="#search" onclick="showPage('search', true)"
+      class="waves-effect waves-light btn firstBtn radius">LET'SCOOK</a>
     <a href="#login" onclick="showPage('login')" class="link">LOG IN</a>
   </section>
 
@@ -93,44 +95,54 @@
 
   <!-- recipe page -->
   <section id="recipe" class="page col s12 recipe-page">
-    <div class="recipe-container">
-      <h1 class="recipe-title">Title</h1>
-      <div class="card-image" id="recipe-card-img">
-        <img src="img/pancakes.jpg">
-        <p class="time">30'</p>
-        <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="favourite()"><i class="material-icons">favorite</i></a>
-      </div>
-      <!-- <img src="img/pancakes.jpg" alt="pancakes">
-
-      <a class="btn-floating halfway-fab waves-effect waves-light" onclick="favourite()">
-        <i class="material-icons">favorite</i>
-      </a> -->
-      <h2>Ingredients</h2>
-      <ul class="recipe-ingredients">
-        <li class="recipe-ingredient">banana</li>
-        <li class="recipe-ingredient">milk</li>
-        <li class="recipe-ingredient">flour</li>
-      </ul>
-      <h2>Steps</h2>
-      <div class="recipe-steps">
-        <p class="recipe-step">Step 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec convallis lorem risus, ut
-          egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec commodo imperdiet nulla non eleifend.</p>
-        <p class="recipe-step">Step 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec convallis lorem risus, ut
-          egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec commodo imperdiet nulla non eleifend.</p>
-        <p class="recipe-step">Step 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec convallis lorem risus, ut
-          egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec commodo imperdiet nulla non eleifend.</p>
-      </div>
+    <div class="recipe-container" id="recipe-page-container">
+      <!-- <div>
+        <h1 class="recipe-title">Title</h1>
+        <div class="card-image" id="recipe-card-img">
+          <img src="img/pancakes.jpg">
+          <p class="time">30'</p>
+          <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="favourite()"><i
+              class="material-icons">favorite</i></a>
+        </div>
+        <h2>Ingredients</h2>
+        <ul class="recipe-ingredients">
+          <li class="recipe-ingredient">banana</li>
+          <li class="recipe-ingredient">milk</li>
+          <li class="recipe-ingredient">flour</li>
+        </ul>
+        <h2>Steps</h2>
+        <div class="recipe-steps">
+          <p class="recipe-step">Step 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam
+            vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec
+            convallis lorem risus, ut
+            egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec
+            commodo imperdiet nulla non eleifend.</p>
+          <p class="recipe-step">Step 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam
+            vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec
+            convallis lorem risus, ut
+            egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec
+            commodo imperdiet nulla non eleifend.</p>
+          <p class="recipe-step">Step 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pharetra diam
+            vitae euismod porta. Donec gravida cursus vulputate. Donec fermentum ipsum non aliquet pulvinar. Donec
+            convallis lorem risus, ut
+            egestas nunc convallis eu. Quisque non pulvinar nulla. Ut tempus ligula id lacus auctor imperdiet. Donec
+            commodo imperdiet nulla non eleifend.</p>
+        </div>
+      </div> -->
     </div>
+    <a href="#search" onclick="showPage('search', true)" class="recipe-back-link"><i
+        class="medium material-icons">chevron_left</i>Back</a>
   </section>
 
   <!-- home page to search ingredients -->
-  <section id="search" class="page col s12">
+  <section id="search" class="page col s12 search-page">
     <div class="container">
       <div class="row">
         <div class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input type="text" id="autocomplete-input" class="autocomplete" placeholder="Type your ingredient"></input>
+              <input type="text" id="autocomplete-input" class="autocomplete"
+                placeholder="Type your ingredient"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -139,7 +151,7 @@
 
         </div>
         <!-- button show recipes -->
-        <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
+        <a class="waves-effect waves-light btn radius" onclick="searchRecipe()">SHOW RECIPES</a>
       </div>
 
 
@@ -163,7 +175,7 @@
           </div>
         </form>
         <!-- button show recipes -->
-        <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
+        <a class="waves-effect waves-light btn radius" onclick="searchRecipe()">SHOW RECIPES</a>
       </div>
 
       <!-- card -->
@@ -186,7 +198,7 @@
           </div>
         </form>
         <!-- button show recipes -->
-        <a class="waves-effect waves-light btn radius" onclick="searchRecipe">SHOW RECIPES</a>
+        <a class="waves-effect waves-light btn radius" onclick="searchRecipe()">SHOW RECIPES</a>
       </div>
 
       <!-- card -->
@@ -244,10 +256,12 @@
               </div>
             </div>
 
-            <button class="waves-effect waves-light btn radius" type="button" name="button" onclick="addStep()">Add step</button>
+            <button class="waves-effect waves-light btn radius" type="button" name="button" onclick="addStep()">Add
+              step</button>
             <br>
             <br>
-            <button class="waves-effect waves-light btn radius " type="button" name="button" onclick="newRecipe()">Add your recipe</button>
+            <button class="waves-effect waves-light btn radius " type="button" name="button" onclick="newRecipe()">Add
+              your recipe</button>
 
           </form>
         </div>
