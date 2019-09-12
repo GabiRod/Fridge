@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
 //   }
 // }
 
-
 // hide all pages
 function hideAllPages() {
   let pages = document.querySelectorAll(".page");
@@ -95,6 +94,8 @@ function setDefaultPage() {
 
 setDefaultPage();
 
+let stepNumber = 1;
+
 // ========== Firebase sign in functionality ========== //
 
 // Your web app's Firebase configuration
@@ -113,7 +114,9 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const recipeRef = db.collection("recipes");
 const ingredientRef = db.collection("ingredients");
+const favouritesRef = db.collection("favourites");
 let allRecipes = {};
+let allIngredients = {};
 
 // watch the database ref for changes
 recipeRef.onSnapshot(function (snapshotData) {
@@ -125,8 +128,11 @@ recipeRef.onSnapshot(function (snapshotData) {
 // ingredients
 ingredientRef.onSnapshot(function (snapshotData) {
   let ingredients = snapshotData.docs;
-  // console.log(snapshotData);
+  allIngredients = ingredients;
+  // console.log(allIngredients);
+
   appendIngredients(ingredients);
+
 });
 
 // Firebase UI configuration
@@ -147,8 +153,21 @@ firebase.auth().onAuthStateChanged(function (user) {
   // let tabbar = document.querySelector('#tabbar');
   // console.log(user);
   if (user) { // if user exists and is authenticated
-
     setDefaultPage('search');
+
+    console.log("user is log in");
+    console.log(user);
+    favouritesRef.where("userId", "==", user.uid)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          console.log(doc.data());
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting favourites: ", error);
+      });
+
     //  tabbar.classList.remove("hide");
   } else { // if user is not logged in
     // showPage("login");
@@ -157,6 +176,11 @@ firebase.auth().onAuthStateChanged(function (user) {
     ui.start('#firebaseui-auth-container', uiConfig);
   }
 });
+
+let provider = new firebase.auth.FacebookAuthProvider();
+provider.addScope('email, picture');
+// console.log(provider);
+
 
 // sign out user
 function logout() {
@@ -173,30 +197,22 @@ function logout() {
   });
 }
 
-
-
 // RECIPES
-
-console.log("user is log in");
-
 function appendRecipes(recipes) {
   let htmlTemplate = "";
   for (let recipe of recipes) {
     htmlTemplate += `
-      <div class="col s12 m6 l4">
+      <div id="recipe-${recipe.id}" class="col s12 m6 l4">
         <div class="card">
           <div class="card-image">
             <img src="${recipe.data().img}">
-            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite()">
-              <i class="material-icons">favorite</i>
+            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite('${recipe.id}');">
+              <i class="material-icons fav">favorite</i>
             </a>
           </div>
           <div class="card-content">
           <p class="time">${recipe.data().time}'</p>
             <span class="card-title">${recipe.data().title}</span>
-            <ul>
-              <li>${recipe.data().ingredients}</li>
-            </ul>
             <a class="waves-effect waves-light btn radius" onclick="openRecipe('${recipe.id}')">OPEN RECIPE</a>
           </div>
         </div>
@@ -204,16 +220,22 @@ function appendRecipes(recipes) {
     `;
   }
   document.querySelector('#recipes-container').innerHTML = htmlTemplate;
-  console.log(recipes);
+  // console.log(recipes);
 }
 
 function openRecipe(id) {
   const recipe = allRecipes.find(r => r.id === id);
-  console.log(recipe);
+  // console.log(recipe);
   let htmlTemplate = "";
+
   let steps = recipe.data().steps.map(step => {
-    console.log(step);
+    // console.log(step);
     return `<p class="recipe-step">${step}</p>`
+  })
+
+  let recipeIngredients = recipe.data().ingredients.map(recipeIngredient => {
+    // console.log(recipeIngredient.title);
+    return `<li class="recipe-ingredient">${recipeIngredient.amount + " " + recipeIngredient.title}</li>`
   })
 
   htmlTemplate = `
@@ -223,12 +245,10 @@ function openRecipe(id) {
       <img src="${recipe.data().img}">
       <p class="time">${recipe.data().time}'</p>
       <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="favourite()"><i
-          class="material-icons">favorite</i></a>
+          class="material-icons fav">favorite</i></a>
     </div>
     <h2>Ingredients</h2>
-    <ul class="recipe-ingredients">
-      <li class="recipe-ingredient">${recipe.data().ingredients}</li>
-    </ul>
+    <ul class="recipe-ingredients">${recipeIngredients}</ul>
     <h2>Steps</h2>
     <div class="recipe-steps">${steps}</div>
   </div>
@@ -239,11 +259,45 @@ function openRecipe(id) {
   showPage("recipe");
 }
 
-// search function
+// favourite
+function favourite(id) {
+  const recipeElement = document.querySelector(`#recipe-${id} .fav`);
+
+  recipeElement.style.color = "red";
+  recipeElement.style.background = "white";
+  // console.log(id);
+
+  const recipe = allRecipes.find(r => r.id === id);
+  let htmlTemplate = "";
+
+  for (let recipe of recipes) {
+    htmlTemplate += `
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="${recipe.data().img}">
+            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite();">
+              <i class="material-icons fav">favorite</i>
+            </a>
+          </div>
+          <div class="card-content">
+          <p class="time">${recipe.data().time}'</p>
+            <span class="card-title">${recipe.data().title}</span>
+            <a class="waves-effect waves-light btn radius" onclick="openRecipe('${recipe.id}')">OPEN RECIPE</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  document.querySelector('#recipes-container').innerHTML = htmlTemplate;
+  console.log(recipes);
+}
+
+// search function (old one)
 function appendIngredients(ingredients) {
   let htmlTemplate = "";
   for (let ingredient of ingredients) {
-    // console.log(ingredient.data().name);
+    //  console.log(ingredient.data().name);
     htmlTemplate = `
     <ul>
       <li>${ingredient.data().name}</li>
@@ -263,9 +317,9 @@ document.addEventListener('DOMContentLoaded', function () {
       "Google": 'https://placehold.it/250x250'
     },
     onAutocomplete: function (text) {
-      response.innerHTML = '<h3>helloo:</h3>'
+      response.innerHTML = '<p>Hello</p>';
     }
-  }
+  };
   let elems = document.querySelectorAll('.autocomplete');
   let instances = M.Autocomplete.init(elems, options);
 });
@@ -273,17 +327,43 @@ document.addEventListener('DOMContentLoaded', function () {
 let response = document.getElementById('response');
 
 
-// function search() {
-
-// }
-
-
-function addStep() {
+function addIngredient() {
   let htmlTemplate = "";
   htmlTemplate = `
-    <input id="step" placeholder="Type another step of the recipe">`;
-  console.log(htmlTemplate);
-  document.querySelector('.policko').innerHTML += htmlTemplate;
+    <div class="delete-area">
+              <div class = "input-field col s6 ingredient-margin">
+              <input placeholder = "Amount" id = "amount" type = "text" class = "validate">
+              </div> <div class = "input-field col s6 ingredient-margin input-flex">
+              <input placeholder = "Ingredient" id = "ingredient" type = "text" class = "validate">
+              <a class ="delete" onclick ="deleteInput()">x</a>
+              </div>
+              </div>`;
+  document.querySelector('.field-ingredient').innerHTML += htmlTemplate;
+
+};
+
+function addStep() {
+
+  if (stepNumber < 10) {
+    stepNumber++
+
+    let htmlTemplate = "";
+    htmlTemplate = `
+    <div class="delete-area">
+    <div class="input-field col s12 input-flex">
+    <span class="small-button number-step"> ${stepNumber} </span>
+    <input placeholder="Type another step of the recipe">
+    <a class="delete" onclick="deleteInput()">×</a>
+    </div>
+    </div>`;
+
+    document.querySelector('.policko').innerHTML += htmlTemplate;
+  }
+};
+
+function deleteInput() {
+  let button = document.querySelector(".delete-area");
+  button.parentNode.removeChild(button);
 };
 
 //POP UP - NEW RECIPE
@@ -291,13 +371,14 @@ function newRecipe() {
   // references to the input fields
   let titleInput = document.querySelector('#title');
   let pictureInput = document.querySelector('#mail');
-  console.log(titleInput.value);
-  console.log(pictureInput.value);
+  let ingredient = document.querySelector('#ingredient');
+  // console.log(titleInput.value);
+  // console.log(pictureInput.value);
 
-  let newUser = {
-    title: titleInput.value,
-    picture: pictureInput.value
-  };
+  let newRecipe = [
+    title = titleInput.value,
+    picture = pictureInput.value,
+  ];
 
   recipeRef.add(newRecipe);
 }

@@ -45,9 +45,7 @@
         <!-- floating log in -->
         <div id="profile-photo-button" class="fixed-action-btn nav">
           <a class="btn-floating btn-medium white">
-            <img class="profile-photo"
-              src="https://scontent-amt2-1.xx.fbcdn.net/v/t1.0-9/46519686_10210150763084864_4222107548100067328_n.jpg?_nc_cat=103&_nc_oc=AQnyaYCmFWwBx4xJOb_TF9vI7mb7WyPh4zZiJNNQN9wdTctAXd2r_C2iynN-MQcIVHw&_nc_ht=scontent-amt2-1.xx&oh=04733d58cad963cf2fdb90bac85b1c11&oe=5E139A24"
-              alt="Profile photo">
+            <img id="user-image" class="profile-photo" src="" alt="Profile photo">
           </a>
           <ul>
             <li>
@@ -80,8 +78,7 @@
     <p>No More Food Waste</p>
     <img src="img/whatsinyourfridge.png" class="logo" alt="logo">
     <p>Find recipes from the ingredients that you already have at home!</p>
-    <a href="#search" onclick="showPage('search', true)"
-      class="waves-effect waves-light btn firstBtn radius">LET'SCOOK</a>
+    <a href="#search" onclick="showPage('search', true)" class="waves-effect waves-light btn firstBtn radius">LET'SCOOK</a>
     <a href="#login" onclick="showPage('login')" class="link">LOG IN</a>
   </section>
 
@@ -130,8 +127,7 @@
         </div>
       </div> -->
     </div>
-    <a href="#search" onclick="showPage('search', true)" class="recipe-back-link"><i
-        class="medium material-icons">chevron_left</i>Back</a>
+    <a href="#search" onclick="showPage('search', true)" class="recipe-back-link"><i class="medium material-icons">chevron_left</i>Back</a>
   </section>
 
   <!-- home page to search ingredients -->
@@ -141,8 +137,7 @@
         <div class="col s12">
           <div class="row">
             <div class="input-field col s12">
-              <input type="text" id="autocomplete-input" class="autocomplete"
-                placeholder="Type your ingredient"></input>
+              <input type="text" id="autocomplete-input" class="autocomplete" placeholder="Type your ingredient"></input>
               <i class="material-icons prefix">search</i>
             </div>
           </div>
@@ -220,49 +215,61 @@
 
       <a class="close" href="#">&times;</a>
       <div class="content add-new-recipe">
+        <a class="close" href="#">×</a>
         <h1>Add your own recipe</h1>
         <div class="row">
           <form class="col s12">
-            <div class="row">
-              <div class="input-field col s12">
-                <input placeholder="Type the name of the recipe" id="title" type="text" class="validate">
+
+            <div class="input-field col s12">
+              <input placeholder="Type the name of the recipe" id="title" type="text" class="validate">
+            </div>
+
+            <div class="file-field input-field col s12" action="#">
+              <div class="btn waves-effect waves-light btn radius small-button">
+                <input type="file" class="small-button">
+                <span>Image </span>
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
               </div>
             </div>
 
-            <div class="row">
-              <div class="file-field input-field" action="#">
-                <div class="btn waves-effect waves-light btn radius small-button">
-                  <input type="file" class="small-button">
-                  <span>Image </span>
-                </div>
-                <div class="file-path-wrapper">
-                  <input class="file-path validate" type="text">
-                </div>
-              </div>
+            <div class="input-field col s6 ingredient-margin input-flex ">
+              <input placeholder="Amount" id="amount" type="text" class="validate">
+            </div>
+            <div class="input-field col s6 ingredient-margin input-flex">
+              <input placeholder="Ingredient" id="ingredient" type="text" class="validate">
+              <a class="delete" onclick="deleteInput()">×</a>
             </div>
 
 
-            <div class="input-field col s12">
-              <input placeholder="Type the ingredients" id="ingredient" type="text" class="validate">
+            <div class=" field-ingredient">
             </div>
 
-            <div class="input-field col s12">
+
+            <a class="waves-effect waves-light btn radius" name="button" onclick="addIngredient()">ADD INGREDIENT</a>
+
+
+            <div class="input-field col s12 input-flex">
+              <span class="small-button number-step"> 1 </span>
               <input type="text" id="steps" placeholder="Type the first step of the recipe" required="">
+              <a class="delete" onclick="deleteInput()">×</a>
             </div>
 
-            <div class="input-field col s12">
-              <div class="policko">
 
-              </div>
+
+            <div class="policko">
             </div>
 
-            <button class="waves-effect waves-light btn radius" type="button" name="button" onclick="addStep()">Add
-              step</button>
-            <br>
-            <br>
-            <button class="waves-effect waves-light btn radius " type="button" name="button" onclick="newRecipe()">Add
-              your recipe</button>
 
+            <a class="waves-effect waves-light btn radius" name="button" onclick="addStep()">ADD STEP</a>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="save">
+              <a class="waves-effect waves-light btn radius" name="button" onclick="newRecipe()">SAVE RECIPE</a>
+            </div>
           </form>
         </div>
       </div>

@@ -278,7 +278,6 @@ body {
   margin: 3px 0 0 0;
 }
 
-
 /* #log-out-ul {
   width: 100%;
 }
@@ -291,7 +290,6 @@ body {
   width: 38px;
   height: 38px;
 } */
-
 nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-small>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-flat>.material-icons, nav ul a.btn-floating>.material-icons {
   color: black;
 }
@@ -354,6 +352,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 
 .waves-effect {
   background-color: var(--orange);
+  z-index: 0;
 }
 
 .waves-effect:hover {
@@ -420,10 +419,6 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 
 /* log in page*/
 /* RECIPES */
-.add {
-  background-color: #F28C17;
-}
-
 /* pop up window- add new recipe */
 .overlay {
   position: fixed;
@@ -463,13 +458,12 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   background-color: white;
 }
 
-.content {
+/* .btn, .btn-large, .btn-small .content .add {
   z-index: 200;
   background-color: white;
   border-radius: 20px;
   margin: 10px;
-}
-
+} */
 .small-button {
   font-size: 15px;
   color: #F28C17;
@@ -478,8 +472,48 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   border-color: #F28C17;
 }
 
+.input-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.number-step {
+  padding: 5px 11px 2px 11px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.ingredient-margin {
+  margin: 0px;
+  padding: 2rem;
+}
+
+.save {
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  z-index: 10;
+  top: 30px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.delete {
+  display: flex;
+  text-decoration: none;
+  color: #333;
+  font-size: 35px;
+}
+
 /* end of pop up window- add new recipe */
-/* END OF RECIPES */
+/* END OF MY RECIPES */
 /* start of recipe */
 .recipe-page {
   padding: 0 20px 40px 20px;
@@ -537,15 +571,15 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 }
 
 .recipe-page .recipe-back-link {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: black;
-    width: 130px;
-    margin-top: 20px;
-    font-size: 20px;
-    text-transform: uppercase;
-    cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: black;
+  width: 130px;
+  margin-top: 20px;
+  font-size: 20px;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 @media only screen and (min-width: 701px) {
