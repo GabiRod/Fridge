@@ -17,22 +17,22 @@
 <body>
   <header>
     <!-- loader -->
-    <!-- <div id="cooking">
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div id="area">
+    <div id="cooking">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div id="area">
         <div id="sides">
-            <div id="pan"></div>
-            <div id="handle"></div>
+          <div id="pan"></div>
+          <div id="handle"></div>
         </div>
         <div id="pancake">
-            <div id="pastry"></div>
+          <div id="pastry"></div>
         </div>
+      </div>
     </div>
-</div> -->
 
 
     <!-- Navigation -->
@@ -137,18 +137,6 @@
   <!-- favourites page -->
   <section id="favourites" class="page col s12">
     <div class="container">
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col s11">
-              <input onkeyup="search(this.value)" class="materialize-input" placeholder="Type your recipe"></input>
-              <i class="material-icons prefix">search</i>
-            </div>
-          </div>
-        </form>
-        <!-- button show recipes -->
-        <a class="waves-effect waves-light btn radius" onclick="searchRecipe()">SHOW RECIPES</a>
-      </div>
 
       <!-- card -->
       <div id="recipes-container" class="row">
@@ -181,7 +169,7 @@
 
       <div class="content add-new-recipe">
         <a href="#recipies" onclick="showPage('recipies',true)">
-          <i class="material-icons delete-page-black">clear</i>
+          <i class="material-icons delete-black">clear</i>
         </a>
         <h1>Add your own recipe</h1>
         <div class="row">
@@ -210,13 +198,10 @@
 
             </div>
 
-
             <div class=" field-ingredient">
             </div>
 
-
             <a class="waves-effect waves-light btn radius" name="button" onclick="addIngredient()">ADD INGREDIENT</a>
-
 
             <div class="input-field col s12 input-flex">
               <span class="small-button number-step"> 1 </span>
@@ -224,10 +209,8 @@
 
             </div>
 
-
             <div class="policko">
             </div>
-
 
             <a class="waves-effect waves-light btn radius" name="button" onclick="addStep()">ADD STEP</a>
             <br>

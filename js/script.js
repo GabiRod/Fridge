@@ -22,15 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-//
-// function showLoader(show) {
-//   let loader = document.querySelector('#cooking');
-//   if (show) {
-//     loader.classList.remove("hide");
-//   } else {
-//     loader.classList.add("hide");
-//   }
-// }
+function showLoader(show) {
+  let loader = document.querySelector('#cooking');
+  if (show) {
+    loader.classList.remove("hide");
+
+  } else {
+    loader.classList.add("hide");
+
+  }
+}
 
 // hide all pages
 function hideAllPages() {
@@ -50,10 +51,12 @@ function showPage(pageId, isTab) {
   // hide navbar if welcome or login page are active
   if (activePage === 'welcome' || activePage === 'login') {
     display = 'flex';
+
     document.querySelector(".nav-extended").classList.add("hide-navbar")
   } else {
     document.querySelector(".nav-extended").classList.remove("hide-navbar")
   };
+
 
   if (activePage === 'favourites' || activePage === 'recipes') {
     console.log("you are shit");
@@ -68,9 +71,9 @@ function showPage(pageId, isTab) {
   if (isTab) {
     tabsInstance.select(pageId);
   }
-  // setTimeout(function() {
-  //   showLoader(false);
-  // }, 900);
+  setTimeout(function() {
+    showLoader(false);
+  }, 10000);
 
 };
 
@@ -168,10 +171,14 @@ const ui = new firebaseui.auth.AuthUI(firebase.auth());
 // Listen on authentication state change
 firebase.auth().onAuthStateChanged(function(user) {
   let userData = user;
+  setTimeout(function() {
+    showLoader(false);
+  }, 5000);
 
   // let tabbar = document.querySelector('#tabbar');
   if (user) { // if user exists and is authenticated
     // appendMyRecipes(myRecipes);
+
     setDefaultPage('search');
     console.log(userData.photoURL);
     let htmlTemplate = "";
@@ -182,6 +189,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     console.log("user is log in");
     // console.log(user);
+
     favouritesRef.where("userId", "==", user.uid)
       .get()
       .then(function(querySnapshot) {
@@ -222,6 +230,9 @@ function logout() {
 
     // Sign-out successful.
     console.log("Succes sign out");
+    M.toast({
+      html: 'Successfuly Log out'
+    })
   }).catch(function(error) {
 
     // An error happened.
@@ -231,6 +242,7 @@ function logout() {
 
 // RECIPES
 function appendRecipes(recipes) {
+
   let htmlTemplate = "";
   for (let recipe of recipes) {
     htmlTemplate += `
@@ -294,6 +306,7 @@ function openRecipe(id) {
 // favourite
 function favourite(id) {
   const recipeElement = document.querySelector(`#recipe-${id} .fav`);
+
 
   recipeElement.style.color = "red";
   recipeElement.style.background = "white";
@@ -436,7 +449,7 @@ function addStep() {
     let htmlTemplate = "";
     htmlTemplate = `
     <div class="delete-area">
-    <div class="input-field col s12 input-flex">
+    <div class="input-field col s12 input-flex step-${stepNumber}">
     <span class="small-button number-step"> ${stepNumber} </span>
     <input type = "text" placeholder="Type another step of the recipe">
     <a class="delete" onclick="deleteInput(this)">
@@ -459,7 +472,6 @@ function deleteInput(element) {
 function deleteInputIng() {
   let element = document.querySelector(".delete-area");
   element.parentNode.removeChild(element);
-
 };
 
 
@@ -468,9 +480,20 @@ function newRecipe() {
   // references to the input fields
   let titleInput = document.querySelector('#title');
   let pictureInput = document.querySelector('#mail');
-  let ingredient = document.querySelector('#ingredient');
+  let ingredients = document.querySelector('#ingredients');
+  let steps = document.querySelector('#steps').value;
   // console.log(titleInput.value);
   // console.log(pictureInput.value);
+
+  for (let step of steps) {
+    steps = [`
+        step${stepNumber}= step-${stepNumber}.value;
+
+        `];
+    console.log(steps);
+
+  };
+
 
   let newRecipe = [
     title = titleInput.value,
