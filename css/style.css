@@ -10,14 +10,18 @@ html {
   width: 100%;
 }
 
+a {
+  cursor: pointer;
+}
+
 h1 {
   font-family: 'Neucha';
   font-size: 2em;
-  letter-spacing: 3px;
   text-align: center;
 }
 
 p {
+  color: white;
   font-size: 18px;
 }
 
@@ -265,6 +269,19 @@ body {
   height: auto;
 }
 
+.nav-extended .navbar-login {
+  justify-content: flex-end;
+}
+
+.nav-extended .navbar-login a {
+  margin-left: auto;
+  margin-right: 30px;
+  font-size: 16px;
+  border-bottom: 1px solid white;
+  height: 46px;
+  cursor: pointer;
+}
+
 .nav-extended .fixed-action-btn.direction-left ul, .nav-extended .fixed-action-btn.direction-right ul {
   left: -55px;
   width: 40px;
@@ -322,6 +339,15 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   align-items: center;
 }
 
+.search-page .ingredients-we-have {
+  background-color: #F6F6F6;
+  color: black;
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  padding: 10px 50px 10px 50px;
+}
+
 .card {
   text-align: left;
 }
@@ -332,6 +358,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 }
 
 .time {
+  color: black;
   position: absolute;
   right: 5%;
   top: 5%;
@@ -340,6 +367,27 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   padding: 0.3rem 0.45rem;
   font-size: 1.2rem;
   box-shadow: 0 3px 6px -4px #5b5a5a;
+}
+
+.section-search input.autocomplete {
+  color: #000;
+}
+
+.input-field .prefix.active {
+  color: var(--orange);
+}
+
+.input-field input[type=text]:not(.browser-default):focus:not([readonly]) {
+  border-bottom: 1px solid var(--orange);
+  box-shadow: none;
+}
+
+.dropdown-content li>a, .dropdown-content li>span {
+  color: #000;
+}
+
+.autocomplete-content li .highlight {
+  color: var(--orange);
 }
 
 /* end of the search page */
@@ -458,6 +506,8 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   background-color: white;
 }
 
+.delete-area:last-of-type {}
+
 /* .btn, .btn-large, .btn-small .content .add {
   z-index: 200;
   background-color: white;
@@ -474,6 +524,7 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 
 .input-flex {
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
   align-items: center;
 }
@@ -505,11 +556,27 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
   color: #333;
 }
 
+.delete-page {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  text-decoration: none;
+  color: white;
+  z-index: 5000;
+}
+
+.delete-page-black {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  text-decoration: none;
+  color: white;
+}
+
 .delete {
   display: flex;
   text-decoration: none;
   color: #333;
-  font-size: 35px;
 }
 
 /* end of pop up window- add new recipe */
