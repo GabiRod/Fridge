@@ -1,5 +1,30 @@
 "use strict";
 
+// ========== Firebase sign in functionality ========== //
+
+// Your web app's Firebase configuration
+let firebaseConfig = {
+  apiKey: "AIzaSyAcZVFE2aDY5jyAvPGI3K0eD_y7ZcL0Wmo",
+  authDomain: "whats-in-your-fridge-59e9e.firebaseapp.com",
+  databaseURL: "https://whats-in-your-fridge-59e9e.firebaseio.com",
+  projectId: "whats-in-your-fridge-59e9e",
+  storageBucket: "whats-in-your-fridge-59e9e.appspot.com",
+  messagingSenderId: "510325509620",
+  appId: "1:510325509620:web:ccc332572aca6af57cbda1"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+const recipeRef = db.collection("recipes");
+const ingredientRef = db.collection("ingredients");
+const favouritesRef = db.collection("favourites");
+const myRecipesRef = db.collection("myRecipes");
+let allRecipes = {};
+let allIngredients = {};
+let myRecipes = {};
+let userData = null;
+
 let activePage = "welcome";
 
 // initialize the plugin navbar
@@ -10,6 +35,7 @@ const tabsInstance = M.Tabs.init(tabs, {
 
     location.href = `#${sectionElement.id}`;
     activePage = sectionElement.id;
+    showPage(sectionElement.id)
   }
 });
 
@@ -57,13 +83,13 @@ function showPage(pageId, isTab) {
     document.querySelector(".nav-extended").classList.remove("hide-navbar")
   };
 
-  // // redirect to log in page if user is not logged in
-  // if (activePage === 'favourites' || activePage === 'recipes') {
-  //   console.log("you are shit");
-  //   showPage("login");
-  // } else {
-  //   console.log("you are not clicking on favourite or recipes page");
-  // };
+  // redirect to log in page if user is not logged in
+  if (!userData) {
+    if (activePage === 'favourites' || activePage === 'recipes') {
+      console.log("you should log in");
+      showPage("login");
+    }
+  }
 
   document.querySelector(`#${pageId}`).style.display = display;
   setActiveTab(pageId);
@@ -107,30 +133,7 @@ setDefaultPage();
 
 let stepNumber = 1;
 
-// ========== Firebase sign in functionality ========== //
 
-// Your web app's Firebase configuration
-let firebaseConfig = {
-  apiKey: "AIzaSyAcZVFE2aDY5jyAvPGI3K0eD_y7ZcL0Wmo",
-  authDomain: "whats-in-your-fridge-59e9e.firebaseapp.com",
-  databaseURL: "https://whats-in-your-fridge-59e9e.firebaseio.com",
-  projectId: "whats-in-your-fridge-59e9e",
-  storageBucket: "whats-in-your-fridge-59e9e.appspot.com",
-  messagingSenderId: "510325509620",
-  appId: "1:510325509620:web:ccc332572aca6af57cbda1"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-const recipeRef = db.collection("recipes");
-const ingredientRef = db.collection("ingredients");
-const favouritesRef = db.collection("favourites");
-const myRecipesRef = db.collection("myRecipes");
-let allRecipes = {};
-let allIngredients = {};
-let myRecipes = {};
-let userData = null;
 
 // watch the database ref for changes
 recipeRef.onSnapshot(function (snapshotData) {
@@ -211,17 +214,12 @@ firebase.auth().onAuthStateChanged(function (user) {
     document.getElementById('profile-photo-button').style.display = 'none';
     document.getElementById('navbar-login').style.display = 'flex';
 
-    // if (activePage === "favourites" || activePage === "recipes") {
-    //   console.log("im log out on fav / recipes")
-    //   showPage("login");
-    // } else {
-    //   console.log("im log out")
-    // }
-
     ui.start('#firebaseui-auth-container', uiConfig);
   }
 });
+
 let provider = new firebase.auth.FacebookAuthProvider();
+
 provider.addScope('email, picture');
 
 // sign out user
