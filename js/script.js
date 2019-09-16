@@ -18,7 +18,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const recipeRef = db.collection("recipes");
 const ingredientRef = db.collection("ingredients");
-const favouritesRef = db.collection("favourites");
 const myRecipesRef = db.collection("myRecipes");
 const usersRef = db.collection("users");
 let allRecipes = {};
@@ -32,20 +31,20 @@ let favouriteRecipes = [];
 let activePage = "welcome";
 
 // watch the database ref for changes =========================================
-recipeRef.onSnapshot(function(snapshotData) {
+recipeRef.onSnapshot(function (snapshotData) {
   let recipes = snapshotData.docs;
   allRecipes = recipes;
   // console.log(snapshotData);
 });
 // ingredients
-ingredientRef.onSnapshot(function(snapshotData) {
+ingredientRef.onSnapshot(function (snapshotData) {
   let ingredients = snapshotData.docs;
   allIngredients = ingredients;
   // console.log(allIngredients);
 
 });
 
-usersRef.onSnapshot(function(snapshotData) {
+usersRef.onSnapshot(function (snapshotData) {
   let users = snapshotData.docs;
   favouriteRecipes = users;
 });
@@ -62,7 +61,7 @@ usersRef.onSnapshot(function(snapshotData) {
 //initialize PLUGIN NAVBAR ====================================================
 const tabs = document.querySelector("#tabs")
 const tabsInstance = M.Tabs.init(tabs, {
-  onShow: function(sectionElement) {
+  onShow: function (sectionElement) {
     // console.log(sectionElement.id);
 
     location.href = `#${sectionElement.id}`;
@@ -72,7 +71,7 @@ const tabsInstance = M.Tabs.init(tabs, {
 });
 
 // initialize the FLOATING BUTTON =============================================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   let elems = document.querySelectorAll('.fixed-action-btn');
   let instances = M.FloatingActionButton.init(elems, {
     direction: 'left',
@@ -121,14 +120,14 @@ function showPage(pageId, isTab) {
       showPage("login");
     }
   }
-
+  console.log(pageId)
   document.querySelector(`#${pageId}`).style.display = display;
   setActiveTab(pageId);
 
   if (isTab) {
     tabsInstance.select(pageId);
   }
-  setTimeout(function() {
+  setTimeout(function () {
     showLoader(false);
   }, 2000);
 
@@ -184,16 +183,16 @@ const uiConfig = {
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
 // Listen on authentication state change ======================================
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
   userData = user;
-  setTimeout(function() {
+  setTimeout(function () {
     showLoader(false);
   }, 5000);
 
   if (user) { // if user exists and is authenticated
     // appendMyRecipes(myRecipes);
 
-    setDefaultPage('search');
+    showPage('search', true);
 
     // hide log in button and show profile floating button
     document.getElementById('profile-photo-button').style.display = 'block';
@@ -208,17 +207,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     console.log("user is log in");
 
-    // check if....
-    favouritesRef.where("userId", "==", user.uid)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          console.log(doc.data());
-        });
-      })
-      .catch(function(error) {
-        console.log("Error getting favourites: ", error);
-      });
     checkFavourites();
   } else { // if user is not logged in
     // hide profile floating button and show log in button
@@ -236,13 +224,13 @@ provider.addScope('email, picture');
 // sign out user
 function logout() {
   //firebase.auth().signOut();
-  firebase.auth().signOut().then(function() {
+  firebase.auth().signOut().then(function () {
     // Sign-out successful.
     console.log("Succes sign out");
     M.toast({
       html: 'Successfuly logged out.'
     })
-  }).catch(function(error) {
+  }).catch(function (error) {
     // An error happened.
     console.log("Error sign out");
   });
@@ -250,12 +238,12 @@ function logout() {
 
 // SEARCH-AUTOCOMPLETE FUNCTION ===============================================
 // Getting the ingridients from the collection of firebase
-db.collection("ingredients").get().then(function(querySnapshot) {
+db.collection("ingredients").get().then(function (querySnapshot) {
   //Convert the objects to display them on the search
   let data = {};
   let i = 0;
   //Function to get the data(ingridients) to use them in the search
-  querySnapshot.forEach(function(doc) {
+  querySnapshot.forEach(function (doc) {
     data[`${doc.data().name}`] = null;
     i++;
   });
@@ -264,7 +252,7 @@ db.collection("ingredients").get().then(function(querySnapshot) {
   //let to display the data, in this case, our ingredients and append them to the DOM
   let options = {
     data: data,
-    onAutocomplete: function(doc) {
+    onAutocomplete: function (doc) {
       console.log(doc);
       selectedIngredients.push(doc);
       let htmlTemplate = "";
@@ -393,19 +381,18 @@ function openRecipe(id) {
   }
 }
 
-
 // FAVOURITES ==================================================================
 // check all favourites after log in
 function checkFavourites() {
 
-  usersRef.doc(userData.uid).onSnapshot(function(snapshotData) {
+  usersRef.doc(userData.uid).onSnapshot(function (snapshotData) {
     let myFavs = snapshotData.data().favourites;
     if (myFavs.length === 0) {
       document.querySelector('#favourites-recipes-container').innerHTML = "";
     }
     let selectedRecipes = [];
     for (let myFav of myFavs) {
-      recipeRef.doc(myFav).get().then(function(doc) {
+      recipeRef.doc(myFav).get().then(function (doc) {
         selectedRecipes.push(doc);
         appendFavourites(selectedRecipes);
       });
@@ -438,9 +425,6 @@ function checkFavourites() {
 
     document.querySelector('#favourites-recipes-container').innerHTML = htmlTemplate;
     console.log(recipes);
-
-    // // check if....
-    // favouritesRef.where("favourites", "==", selectedRecipes)
   };
 };
 
