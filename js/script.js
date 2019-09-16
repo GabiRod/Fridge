@@ -1,6 +1,6 @@
 "use strict";
 
-// ========== Firebase sign in functionality ========== //
+// Firebase sign in functionality =============================================
 
 // Your web app's Firebase configuration
 let firebaseConfig = {
@@ -12,7 +12,7 @@ let firebaseConfig = {
   messagingSenderId: "510325509620",
   appId: "1:510325509620:web:ccc332572aca6af57cbda1"
 };
-// Initialize Firebase
+// Initialize Firebase ========================================================
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
@@ -20,17 +20,49 @@ const recipeRef = db.collection("recipes");
 const ingredientRef = db.collection("ingredients");
 const favouritesRef = db.collection("favourites");
 const myRecipesRef = db.collection("myRecipes");
+const usersRef = db.collection("users");
 let allRecipes = {};
 let allIngredients = {};
 let myRecipes = {};
 let userData = null;
+let selectedIngredients = [];
+let valueOfInput = {};
+let favouriteRecipes = [];
 
 let activePage = "welcome";
 
-// initialize the plugin navbar
+// watch the database ref for changes =========================================
+recipeRef.onSnapshot(function(snapshotData) {
+  let recipes = snapshotData.docs;
+  allRecipes = recipes;
+  // console.log(snapshotData);
+});
+// ingredients
+ingredientRef.onSnapshot(function(snapshotData) {
+  let ingredients = snapshotData.docs;
+  allIngredients = ingredients;
+  // console.log(allIngredients);
+
+});
+
+usersRef.onSnapshot(function(snapshotData) {
+  let users = snapshotData.docs;
+  favouriteRecipes = users;
+});
+
+// myRecipesRef.onSnapshot(function(snapshotData) {
+//   let myRecipes = snapshotData.docs;
+//   myRecipes = myRecipesRef;
+//   console.log(myRecipes);
+//
+//   appendMyRecipes(myRecipes);
+//
+// });
+
+//initialize PLUGIN NAVBAR ====================================================
 const tabs = document.querySelector("#tabs")
 const tabsInstance = M.Tabs.init(tabs, {
-  onShow: function (sectionElement) {
+  onShow: function(sectionElement) {
     // console.log(sectionElement.id);
 
     location.href = `#${sectionElement.id}`;
@@ -39,15 +71,15 @@ const tabsInstance = M.Tabs.init(tabs, {
   }
 });
 
-// initialize the floating button
-document.addEventListener('DOMContentLoaded', function () {
+// initialize the FLOATING BUTTON =============================================
+document.addEventListener('DOMContentLoaded', function() {
   let elems = document.querySelectorAll('.fixed-action-btn');
   let instances = M.FloatingActionButton.init(elems, {
     direction: 'left',
     hoverEnabled: false
   });
 });
-
+// HIDE AND SHOW PAGES/NAV ====================================================
 // hide all pages
 function hideAllPages() {
   let pages = document.querySelectorAll(".page");
@@ -63,7 +95,6 @@ function showLoader(show) {
     // hideAllPages(pageId, isTab);
   } else {
     loader.classList.add("hide");
-
   }
 }
 
@@ -97,12 +128,11 @@ function showPage(pageId, isTab) {
   if (isTab) {
     tabsInstance.select(pageId);
   }
-  setTimeout(function () {
+  setTimeout(function() {
     showLoader(false);
   }, 2000);
 
 };
-
 
 // sets active tabbar/ menu item
 function setActiveTab(pageId) {
@@ -135,32 +165,12 @@ let stepNumber = 1;
 
 
 
-// watch the database ref for changes
-recipeRef.onSnapshot(function (snapshotData) {
-  let recipes = snapshotData.docs;
-  allRecipes = recipes;
-  // console.log(snapshotData);
-  appendRecipes(recipes);
-});
-// ingredients
-ingredientRef.onSnapshot(function (snapshotData) {
-  let ingredients = snapshotData.docs;
-  allIngredients = ingredients;
-  // console.log(allIngredients);
-
-});
-
-// myRecipesRef.onSnapshot(function(snapshotData) {
-//   let myRecipes = snapshotData.docs;
-//   myRecipes = myRecipesRef;
-//   console.log(myRecipes);
-//
-//   appendMyRecipes(myRecipes);
-//
-// });
 
 
-// Firebase UI configuration
+
+
+
+// Firebase UI configuration ==================================================
 const uiConfig = {
   credentialHelper: firebaseui.auth.CredentialHelper.NONE,
   signInOptions: [
@@ -173,10 +183,10 @@ const uiConfig = {
 // Init Firebase UI Authentication
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-// Listen on authentication state change
-firebase.auth().onAuthStateChanged(function (user) {
+// Listen on authentication state change ======================================
+firebase.auth().onAuthStateChanged(function(user) {
   userData = user;
-  setTimeout(function () {
+  setTimeout(function() {
     showLoader(false);
   }, 5000);
 
@@ -198,17 +208,18 @@ firebase.auth().onAuthStateChanged(function (user) {
 
     console.log("user is log in");
 
+    // check if....
     favouritesRef.where("userId", "==", user.uid)
       .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           console.log(doc.data());
         });
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log("Error getting favourites: ", error);
       });
-
+    checkFavourites();
   } else { // if user is not logged in
     // hide profile floating button and show log in button
     document.getElementById('profile-photo-button').style.display = 'none';
@@ -225,29 +236,183 @@ provider.addScope('email, picture');
 // sign out user
 function logout() {
   //firebase.auth().signOut();
-  firebase.auth().signOut().then(function () {
+  firebase.auth().signOut().then(function() {
     // Sign-out successful.
     console.log("Succes sign out");
     M.toast({
       html: 'Successfuly logged out.'
     })
-  }).catch(function (error) {
+  }).catch(function(error) {
     // An error happened.
     console.log("Error sign out");
   });
 }
 
-// RECIPES
-function appendRecipes(recipes) {
+// SEARCH-AUTOCOMPLETE FUNCTION ===============================================
+// Getting the ingridients from the collection of firebase
+db.collection("ingredients").get().then(function(querySnapshot) {
+  //Convert the objects to display them on the search
+  let data = {};
+  let i = 0;
+  //Function to get the data(ingridients) to use them in the search
+  querySnapshot.forEach(function(doc) {
+    data[`${doc.data().name}`] = null;
+    i++;
+  });
+
+  // console.log(data);
+  //let to display the data, in this case, our ingredients and append them to the DOM
+  let options = {
+    data: data,
+    onAutocomplete: function(doc) {
+      console.log(doc);
+      selectedIngredients.push(doc);
+      let htmlTemplate = "";
+      htmlTemplate = `
+          <li class="ingredients-we-have input-flex">${doc}
+          <a class="delete" onclick="deleteInput(this)">
+          <i class="material-icons">clear</i>
+          </a>
+          </li>
+        `;
+      valueOfInput = doc;
+      console.log(valueOfInput);
+      document.querySelector("#response").innerHTML += htmlTemplate;
+      document.querySelector(".autocomplete").value = "";
+      console.log(allRecipes);
+    }
+  };
+
+  let elems = document.querySelectorAll('.autocomplete');
+  let instances = M.Autocomplete.init(elems, options);
+});
+
+// FILLTERED RECIPES BY INGREDIENTS AND SEARCH THEM ============================
+function searchRecipe() {
+  if (selectedIngredients.length === 0) {
+    document.querySelector('#recipes-container').innerHTML = "";
+  }
+
+  console.log(selectedIngredients);
+  let filteredRecipes = [];
+  // loop through all recipes
+  for (let recipe of allRecipes) {
+    // console.log(recipe.data());
+    //loop through all ingredients
+    for (let ingredient of recipe.data().ingredients) {
+
+      //console.log(ingredient.title);
+      if (selectedIngredients.includes(ingredient.title)) {
+        filteredRecipes.push(recipe);
+
+        console.log(filteredRecipes);
+        // problem with the duplicated recipes solved by using Set (https://wsvincent.com/javascript-remove-duplicates-array/)
+        let unique = [...new Set(filteredRecipes)];
+        console.log(unique);
+
+        let htmlTemplate = "";
+        for (let recipe of unique) {
+          htmlTemplate += `
+            <div id="recipe-${recipe.id}" class="col s12 m6 l4">
+              <div class="card">
+                <div class="card-image">
+                  <img src="${recipe.data().img}">
+                  <a class="btn-floating halfway-fab waves-effect waves-light " onclick="heartFavourites('${recipe.id}')">
+                    <i class="material-icons fav">favorite</i>
+                  </a>
+                </div>
+                <div class="card-content">
+                <p class="time">${recipe.data().time}'</p>
+                  <span class="card-title">${recipe.data().title}</span>
+                  <a class="waves-effect waves-light btn radius" onclick="openRecipe('${recipe.id}')">OPEN RECIPE</a>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        document.querySelector('#recipes-container').innerHTML = htmlTemplate;
+      }
+    }
+  }
+};
+
+
+// OPEN RECIPE =========================================================================================================
+function openRecipe(id) {
+  const recipe = allRecipes.find(r => r.id === id);
   let htmlTemplate = "";
-  for (let recipe of recipes) {
-    htmlTemplate += `
-      <div id="recipe-${recipe.id}" class="col s12 m6 l4">
+
+  // loop throught all ingredients
+  let ingredientsTemplate = "";
+  for (let recipeIngredient of recipe.data().ingredients) {
+    ingredientsTemplate += `<li class="recipe-ingredient" onclick="checked()">${recipeIngredient.amount + " " + recipeIngredient.title}</li>`;
+  }
+  // loop throught all steps
+  let stepsTemplate = "";
+  for (let step of recipe.data().steps) {
+    stepsTemplate += `<p class="recipe-step">${step}</p>`;
+  }
+
+  htmlTemplate = `
+  <div class="list">
+    <h1 class="recipe-title">${recipe.data().title}</h1>
+    <div class="card-image" id="recipe-card-img">
+      <img src="${recipe.data().img}">
+      <p class="time">${recipe.data().time}'</p>
+      <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="heartFavourites('${recipe.id}')"><i
+          class="material-icons fav">favorite</i></a>
+    </div>
+    <h2>Ingredients</h2>
+    <ul class="recipe-ingredients">${ingredientsTemplate}</ul>
+    <h2>Steps</h2>
+    <div class="recipe-steps">${stepsTemplate}</div>
+  </div>
+  `;
+
+  document.querySelector('#recipe-page-container').innerHTML = htmlTemplate;
+
+  showPage("recipe");
+  // Add a "checked" symbol when clicking on a list item
+  function checked() {
+    let list = document.querySelector('.list');
+    if (ev.target.tagName === 'ul') {
+      ev.target.classList.toggle('checked');
+    }
+    false;
+  }
+}
+
+
+// FAVOURITES ==================================================================
+// check all favourites after log in
+function checkFavourites() {
+
+  usersRef.doc(userData.uid).onSnapshot(function(snapshotData) {
+    let myFavs = snapshotData.data().favourites;
+    if (myFavs.length === 0) {
+      document.querySelector('#favourites-recipes-container').innerHTML = "";
+    }
+    let selectedRecipes = [];
+    for (let myFav of myFavs) {
+      recipeRef.doc(myFav).get().then(function(doc) {
+        selectedRecipes.push(doc);
+        appendFavourites(selectedRecipes);
+      });
+    }
+  });
+
+  // append favourites
+  function appendFavourites(selectedRecipes) {
+    console.log(selectedRecipes);
+    let htmlTemplate = "";
+    for (let recipe of selectedRecipes) {
+      htmlTemplate += `
+      <div class="col s12 m6 l4">
         <div class="card">
           <div class="card-image">
             <img src="${recipe.data().img}">
-            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite('${recipe.id}');">
-              <i class="material-icons fav">favorite</i>
+            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="deleteFavourites('${recipe.id}')">
+              <i class="material-icons fav heart">favorite</i>
             </a>
           </div>
           <div class="card-content">
@@ -258,177 +423,37 @@ function appendRecipes(recipes) {
         </div>
       </div>
     `;
-  }
-  document.querySelector('#recipes-container').innerHTML = htmlTemplate;
-}
+    }
 
-function openRecipe(id) {
-  const recipe = allRecipes.find(r => r.id === id);
-  let htmlTemplate = "";
-  // loop throught all steps
-  let steps = recipe.data().steps.map(step => {
-    return `<p class="recipe-step">${step}</p>`
-  })
+    document.querySelector('#favourites-recipes-container').innerHTML = htmlTemplate;
+    console.log(recipes);
 
-  // loop throught all ingredients
-  let recipeIngredients = recipe.data().ingredients.map(recipeIngredient => {
-    // console.log(recipeIngredient.title);
-    return `<li class="recipe-ingredient">${recipeIngredient.amount + " " + recipeIngredient.title}</li>`
-  })
+    // // check if....
+    // favouritesRef.where("favourites", "==", selectedRecipes)
 
-  htmlTemplate = `
-  <div>
-    <h1 class="recipe-title">${recipe.data().title}</h1>
-    <div class="card-image" id="recipe-card-img">
-      <img src="${recipe.data().img}">
-      <p class="time">${recipe.data().time}'</p>
-      <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="favourite('${recipe.id}')"><i
-          class="material-icons fav">favorite</i></a>
-    </div>
-    <h2>Ingredients</h2>
-    <ul class="recipe-ingredients">${recipeIngredients}</ul>
-    <h2>Steps</h2>
-    <div class="recipe-steps">${steps}</div>
-  </div>
-  `;
+  };
+};
 
-  document.querySelector('#recipe-page-container').innerHTML = htmlTemplate;
-
-  showPage("recipe");
-}
-
-// add or remove recipe from favourites
-function favourite(id) {
+//ADD AND REMOVE THE RECIPE AS A FAVOURITES ====================================
+function heartFavourites(id) {
   const recipeElement = document.querySelector(`#recipe-${id} .fav`);
 
   // change colour of the add favourite recipes button
   recipeElement.style.color = "red";
   recipeElement.style.background = "white";
 
-  // console.log(userData.uid);
-  // console.log(`recipes/${id}`);
-
-  // favouritesRef.where("recipe", "==", `recipes/${id}`)
-  //   .get()
-  //   .then(function (querySnapshot) {
-  //     console.log("snapshot", querySnapshot);
-
-  //     querySnapshot.forEach(function (doc) {
-  //       console.log(doc.data());
-  //     });
-  //   })
-  //   .catch(function (error) {
-  //     console.log("Error getting favourites: ", error);
-  //   });
-
-  // find rcipe by id
-  // const recipe = allRecipes.find(r => r.id === id);
-
-
-
-  // check if recipe is in favourites https://stackoverflow.com/questions/37910008/check-if-value-exists-in-firebase-db
-  //favouritesRef.orderByChild
-  // firebase.database().ref("favourites").orderByChild("recipe").equalTo(recipe).once("value", snapshot => {
-  //   if (snapshot.exists()) {
-  //     const userData = snapshot.val();
-  //     console.log("exists!", userData);
-
-
-  //   }
-  // });
-
-  // favouritesRef.child(recipe).equalTo("recipe").once('value', function (snapshot) {
-  //   if (snapshot.exists()) {
-  //     alert('exists');
-  //   } else {
-  //     alert('nope');
-  //   }
-  // });
-
-
-
-
-
-  // let htmlTemplate = "";
-
-  // for (let recipe of recipes) {
-  //   htmlTemplate += `
-  //     <div class="col s12 m6 l4">
-  //       <div class="card">
-  //         <div class="card-image">
-  //           <img src="${recipe.data().img}">
-  //           <a class="btn-floating halfway-fab waves-effect waves-light " onclick="favourite();">
-  //             <i class="material-icons fav">favorite</i>
-  //           </a>
-  //         </div>
-  //         <div class="card-content">
-  //         <p class="time">${recipe.data().time}'</p>
-  //           <span class="card-title">${recipe.data().title}</span>
-  //           <a class="waves-effect waves-light btn radius" onclick="openRecipe('${recipe.id}')">OPEN RECIPE</a>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   `;
-  // }
-  // document.querySelector('#recipes-container').innerHTML = htmlTemplate;
-  // console.log(recipes);
+  usersRef.doc(userData.uid).set({
+    favourites: firebase.firestore.FieldValue.arrayUnion(id)
+  }, {
+    merge: true
+  });
 }
 
-// search-autocomplete function
-// Getting the ingridients from the collection of firebase
-db.collection("ingredients").get().then(function (querySnapshot) {
-  //Convert the objects to display them on the search
-  let data = {};
-  let i = 0;
-  //Function to get the data(ingridients) to use them in the search
-  querySnapshot.forEach(function (doc) {
-    data[`${doc.data().name}`] = null;
-    i++;
+function deleteFavourites(id) {
+  usersRef.doc(userData.uid).update({
+    favourites: firebase.firestore.FieldValue.arrayRemove(id)
   });
-
-  // console.log(data);
-  //let to display the data, in this case, our ingredients and append them to the DOM
-  let options = {
-    data: data,
-    onAutocomplete: function (doc) {
-      console.log(doc);
-      let htmlTemplate = "";
-      htmlTemplate = `
-          <li class="ingredients-we-have input-flex">${doc}
-          <a class="delete" onclick="deleteInput(this)">
-          <i class="material-icons">clear</i>
-          </a>
-          </li>
-        `;
-
-      document.querySelector("#response").innerHTML += htmlTemplate;
-      document.querySelector(".autocomplete").value = "";
-
-      console.log(allRecipes);
-      // //  allRecipes.filter(recipe => recipe.ingredients.data().title.some(recipes => recipes.ingredients.title.includes(doc)));
-      // let recipeIngredients = allRecipes.data().ingredients.map(recipeIngredient => {
-      //   // console.log(recipeIngredient.title);
-      //   return recipeIngredient.title
-      // })
-
-      let filteredRecipes = [];
-      for (let recipe of allRecipes) {
-        let ingredient = allRecipes.ingredients;
-        if (ingredient.includes(doc)) {
-          filteredRecipes.push(recipe);
-          console.log(filteredRecipes);
-
-        }
-      }
-    }
-  };
-
-  let elems = document.querySelectorAll('.autocomplete');
-  let instances = M.Autocomplete.init(elems, options);
-});
-
-
-// filtering ingredients
+}
 
 //MY Recipes
 
@@ -457,7 +482,7 @@ db.collection("ingredients").get().then(function (querySnapshot) {
 // }
 //
 
-// add nwe input of ingredient
+// ADD NEW NEW INGREDIENT OF RECIPE IN POP UP ==================================
 function addIngredient() {
   let htmlTemplate = "";
   htmlTemplate = `
@@ -476,7 +501,7 @@ function addIngredient() {
   document.querySelector('.field-ingredient').innerHTML += htmlTemplate;
 };
 
-// ad new step of recipe
+// ADD THE NEW STEP OF RECIPE IN POP UP ========================================
 function addStep() {
   if (stepNumber < 10) {
     stepNumber++
@@ -492,16 +517,19 @@ function addStep() {
     </a>
     </div>
     </div>`;
-
     document.querySelector('.policko').innerHTML += htmlTemplate;
   }
 };
 
+// DELETE THE INPUT IN LIST OF SEARCH ==========================================
 function deleteInput(element) {
+  //delete an element from an array - https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
+  for (var i = 0; i < selectedIngredients.length; i++) {
+    if (selectedIngredients[i] === valueOfInput) {
+      selectedIngredients.splice(0, 1);
+    }
+  }
   element.parentNode.remove();
-  //  let element = document.querySelector(".delete-area");
-  //element.parentNode.removeChild(element);
-  //  button.parentNode.removeChild(button);
 };
 
 function deleteInputIng() {
@@ -509,8 +537,7 @@ function deleteInputIng() {
   element.parentNode.removeChild(element);
 };
 
-
-//POP UP - NEW RECIPE
+// SAVING NEW RECIPE ==========================================================
 function newRecipe() {
   // references to the input fields
   let titleInput = document.querySelector('#title');
@@ -523,12 +550,9 @@ function newRecipe() {
   for (let step of steps) {
     steps = [`
         step${stepNumber}= step-${stepNumber}.value;
-
         `];
     console.log(steps);
-
   };
-
 
   let newRecipe = [
     title = titleInput.value,
