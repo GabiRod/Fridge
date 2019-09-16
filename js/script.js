@@ -345,13 +345,20 @@ function openRecipe(id) {
   // loop throught all ingredients
   let ingredientsTemplate = "";
   for (let recipeIngredient of recipe.data().ingredients) {
-    ingredientsTemplate += `<li class="recipe-ingredient" onclick="checked()">${recipeIngredient.amount + " " + recipeIngredient.title}</li>`;
+    ingredientsTemplate += `<li class="recipe-ingredient"><form action="#">
+    <p>
+        <label>
+        <input type="checkbox" />
+        <span>${recipeIngredient.amount + " " + recipeIngredient.title}</span>
+        </label>
+    </p></li>`;
   }
   // loop throught all steps
   let stepsTemplate = "";
   for (let step of recipe.data().steps) {
     stepsTemplate += `<p class="recipe-step">${step}</p>`;
   }
+
 
   htmlTemplate = `
   <div class="list">
@@ -430,7 +437,6 @@ function checkFavourites() {
 
     // // check if....
     // favouritesRef.where("favourites", "==", selectedRecipes)
-
   };
 };
 

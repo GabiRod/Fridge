@@ -500,37 +500,6 @@ i.heart {
 }
 
 /* log in page*/
-/* RECIPES */
-.list ul {
-  cursor: pointer;
-  list-style-type: none;
-  transition: 0.2s;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.list .checked .recipe-ingredient {
-  background: #888;
-  color: var(--orange);
-  text-decoration: line-through;
-}
-
-/* Add a "checked" mark when clicked on */
-.list .checked .recipe-ingredient::before {
-  content: '';
-  position: absolute;
-  border-color: var(--orange);
-  border-style: solid;
-  border-width: 0 2px 2px 0;
-  top: 10px;
-  left: 16px;
-  transform: rotate(45deg);
-  height: 15px;
-  width: 7px;
-}
-
 /* pop up window- add new recipe */
 .overlay {
   position: fixed;
@@ -711,6 +680,11 @@ i.heart {
   font-size: 20px;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+[type="checkbox"]:checked+span:not(.lever):before {
+  border-right: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
 }
 
 @media only screen and (min-width: 701px) {
