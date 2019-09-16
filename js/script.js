@@ -345,20 +345,24 @@ function openRecipe(id) {
   // loop throught all ingredients
   let ingredientsTemplate = "";
   for (let recipeIngredient of recipe.data().ingredients) {
-    ingredientsTemplate += `<li class="recipe-ingredient"><form action="#">
-    <p>
+    ingredientsTemplate += `
+    <li class="recipe-ingredient">
         <label>
-        <input type="checkbox" />
+          <input type="checkbox" />
         <span>${recipeIngredient.amount + " " + recipeIngredient.title}</span>
         </label>
-    </p></li>`;
+    </li>`;
   }
   // loop throught all steps
   let stepsTemplate = "";
   for (let step of recipe.data().steps) {
-    stepsTemplate += `<p class="recipe-step">${step}</p>`;
+    stepsTemplate += `
+    <p class="recipe-step">
+    <label>
+    <input type="checkbox" />
+    <span>${step}}</span>
+    </label></p>`;
   }
-
 
   htmlTemplate = `
   <div class="list">

@@ -25,6 +25,13 @@ p {
   font-size: 18px;
 }
 
+label {
+  color: black;
+  font-family: 'Roboto', sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
 toast {
   top: 5%;
 }
