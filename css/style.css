@@ -347,6 +347,11 @@ nav ul a.btn>.material-icons, nav ul a.btn-large>.material-icons, nav ul a.btn-s
 /*  END OF NAVIGATION */
 /* SEARCH PAGE */
 i.heart {
+  color: white;
+  background-color: rgb(241, 139, 23);
+}
+
+i.heart.is-liked {
   color: red;
   background-color: white;
 }

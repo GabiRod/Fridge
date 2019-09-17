@@ -1,6 +1,6 @@
 "use strict";
 
-// Firebase sign in functionality =============================================
+// Firebase sign in functionality ==============================================
 
 // Your web app's Firebase configuration
 let firebaseConfig = {
@@ -12,7 +12,7 @@ let firebaseConfig = {
   messagingSenderId: "510325509620",
   appId: "1:510325509620:web:ccc332572aca6af57cbda1"
 };
-// Initialize Firebase ========================================================
+// Initialize Firebase =========================================================
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
@@ -27,10 +27,11 @@ let userData = null;
 let selectedIngredients = [];
 let valueOfInput = {};
 let favouriteRecipes = [];
+let selectedFile;
 
 let activePage = "welcome";
 
-// watch the database ref for changes =========================================
+// watch the database ref for changes ==========================================
 recipeRef.onSnapshot(function (snapshotData) {
   let recipes = snapshotData.docs;
   allRecipes = recipes;
@@ -44,11 +45,6 @@ ingredientRef.onSnapshot(function (snapshotData) {
 
 });
 
-usersRef.onSnapshot(function (snapshotData) {
-  let users = snapshotData.docs;
-  favouriteRecipes = users;
-});
-
 // myRecipesRef.onSnapshot(function(snapshotData) {
 //   let myRecipes = snapshotData.docs;
 //   myRecipes = myRecipesRef;
@@ -58,7 +54,7 @@ usersRef.onSnapshot(function (snapshotData) {
 //
 // });
 
-//initialize PLUGIN NAVBAR ====================================================
+//initialize PLUGIN NAVBAR =====================================================
 const tabs = document.querySelector("#tabs")
 const tabsInstance = M.Tabs.init(tabs, {
   onShow: function (sectionElement) {
@@ -70,7 +66,7 @@ const tabsInstance = M.Tabs.init(tabs, {
   }
 });
 
-// initialize the FLOATING BUTTON =============================================
+// initialize the FLOATING BUTTON ==============================================
 document.addEventListener('DOMContentLoaded', function () {
   let elems = document.querySelectorAll('.fixed-action-btn');
   let instances = M.FloatingActionButton.init(elems, {
@@ -78,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
     hoverEnabled: false
   });
 });
-// HIDE AND SHOW PAGES/NAV ====================================================
+// HIDE AND SHOW PAGES/NAV =====================================================
 // hide all pages
 function hideAllPages() {
   let pages = document.querySelectorAll(".page");
@@ -120,7 +116,7 @@ function showPage(pageId, isTab) {
       showPage("login");
     }
   }
-  console.log(pageId)
+  // console.log(pageId)
   document.querySelector(`#${pageId}`).style.display = display;
   setActiveTab(pageId);
 
@@ -160,16 +156,7 @@ function setDefaultPage() {
 
 setDefaultPage();
 
-let stepNumber = 1;
-
-
-
-
-
-
-
-
-// Firebase UI configuration ==================================================
+// Firebase UI configuration ===================================================
 const uiConfig = {
   credentialHelper: firebaseui.auth.CredentialHelper.NONE,
   signInOptions: [
@@ -182,22 +169,19 @@ const uiConfig = {
 // Init Firebase UI Authentication
 const ui = new firebaseui.auth.AuthUI(firebase.auth());
 
-// Listen on authentication state change ======================================
+// Listen on authentication state change =======================================
 firebase.auth().onAuthStateChanged(function (user) {
   userData = user;
   setTimeout(function () {
     showLoader(false);
-  }, 5000);
+  }, 500);
 
   if (user) { // if user exists and is authenticated
     // appendMyRecipes(myRecipes);
-
     showPage('search', true);
-
     // hide log in button and show profile floating button
     document.getElementById('profile-photo-button').style.display = 'block';
     document.getElementById('navbar-login').style.display = 'none';
-
     // Show profile photo
     let htmlTemplate = "";
     htmlTemplate = `
@@ -221,7 +205,7 @@ let provider = new firebase.auth.FacebookAuthProvider();
 
 provider.addScope('email, picture');
 
-// sign out user
+//SIGN OUT USER ================================================================
 function logout() {
   //firebase.auth().signOut();
   firebase.auth().signOut().then(function () {
@@ -236,7 +220,7 @@ function logout() {
   });
 }
 
-// SEARCH-AUTOCOMPLETE FUNCTION ===============================================
+// SEARCH-AUTOCOMPLETE FUNCTION ================================================
 // Getting the ingridients from the collection of firebase
 db.collection("ingredients").get().then(function (querySnapshot) {
   //Convert the objects to display them on the search
@@ -267,7 +251,7 @@ db.collection("ingredients").get().then(function (querySnapshot) {
       console.log(valueOfInput);
       document.querySelector("#response").innerHTML += htmlTemplate;
       document.querySelector(".autocomplete").value = "";
-      console.log(allRecipes);
+      // console.log(allRecipes);
     }
   };
 
@@ -281,7 +265,7 @@ function searchRecipe() {
     document.querySelector('#recipes-container').innerHTML = "";
   }
 
-  console.log(selectedIngredients);
+  // console.log(selectedIngredients);
   let filteredRecipes = [];
   // loop through all recipes
   for (let recipe of allRecipes) {
@@ -296,17 +280,21 @@ function searchRecipe() {
         console.log(filteredRecipes);
         // problem with the duplicated recipes solved by using Set (https://wsvincent.com/javascript-remove-duplicates-array/)
         let unique = [...new Set(filteredRecipes)];
-        console.log(unique);
+        // console.log(unique);
 
         let htmlTemplate = "";
         for (let recipe of unique) {
+          // check if recipe is in favourites
+          const isFavourite = favouriteRecipes.some((favouriteRecipe) => {
+            return favouriteRecipe === recipe.id;
+          });
           htmlTemplate += `
             <div id="recipe-${recipe.id}" class="col s12 m6 l4">
               <div class="card">
                 <div class="card-image">
                   <img src="${recipe.data().img}">
-                  <a class="btn-floating halfway-fab waves-effect waves-light " onclick="heartFavourites('${recipe.id}')">
-                    <i class="material-icons fav">favorite</i>
+                  <a class="btn-floating halfway-fab waves-effect waves-light" onclick="heartFavourites('${recipe.id}')">
+                    <i class="material-icons fav heart ${isFavourite ? 'is-liked' : ''}">favorite</i>
                   </a>
                 </div>
                 <div class="card-content">
@@ -348,18 +336,18 @@ function openRecipe(id) {
     <p class="recipe-step">
     <label>
     <input type="checkbox" />
-    <span>${step}}</span>
+    <span>${step}</span>
     </label></p>`;
   }
 
   htmlTemplate = `
-  <div class="list">
+  <div class="list" id="recipe-${recipe.id}">
     <h1 class="recipe-title">${recipe.data().title}</h1>
     <div class="card-image" id="recipe-card-img">
       <img src="${recipe.data().img}">
       <p class="time">${recipe.data().time}'</p>
-      <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button" onclick="heartFavourites('${recipe.id}')"><i
-          class="material-icons fav">favorite</i></a>
+      <a class="btn-floating halfway-fab waves-effect waves-light recipe-floating-button " onclick="heartFavourites('${recipe.id}')">
+      <i class="material-icons fav heart">favorite</i></a>
     </div>
     <h2>Ingredients</h2>
     <ul class="recipe-ingredients">${ingredientsTemplate}</ul>
@@ -371,26 +359,22 @@ function openRecipe(id) {
   document.querySelector('#recipe-page-container').innerHTML = htmlTemplate;
 
   showPage("recipe");
-  // Add a "checked" symbol when clicking on a list item
-  function checked() {
-    let list = document.querySelector('.list');
-    if (ev.target.tagName === 'ul') {
-      ev.target.classList.toggle('checked');
-    }
-    false;
-  }
-}
 
+};
 // FAVOURITES ==================================================================
 // check all favourites after log in
 function checkFavourites() {
 
   usersRef.doc(userData.uid).onSnapshot(function (snapshotData) {
     let myFavs = snapshotData.data().favourites;
+    favouriteRecipes = myFavs;
+
     if (myFavs.length === 0) {
       document.querySelector('#favourites-recipes-container').innerHTML = "";
     }
+
     let selectedRecipes = [];
+
     for (let myFav of myFavs) {
       recipeRef.doc(myFav).get().then(function (doc) {
         selectedRecipes.push(doc);
@@ -401,16 +385,17 @@ function checkFavourites() {
 
   // append favourites
   function appendFavourites(selectedRecipes) {
-    console.log(selectedRecipes);
+    // console.log(selectedRecipes);
     let htmlTemplate = "";
+
     for (let recipe of selectedRecipes) {
       htmlTemplate += `
-      <div class="col s12 m6 l4">
+      <div class="col s12 m6 l4" id="recipe-${recipe.id}">
         <div class="card">
           <div class="card-image">
             <img src="${recipe.data().img}">
-            <a class="btn-floating halfway-fab waves-effect waves-light " onclick="deleteFavourites('${recipe.id}')">
-              <i class="material-icons fav heart">favorite</i>
+            <a class="btn-floating halfway-fab waves-effect waves-light" onclick="deleteFavourites('${recipe.id}')">
+              <i class="material-icons fav heart is-liked">favorite</i>
             </a>
           </div>
           <div class="card-content">
@@ -424,18 +409,27 @@ function checkFavourites() {
     }
 
     document.querySelector('#favourites-recipes-container').innerHTML = htmlTemplate;
-    console.log(recipes);
+    // console.log(recipes);
   };
 };
 
 //ADD AND REMOVE THE RECIPE AS A FAVOURITES ====================================
 function heartFavourites(id) {
-  const recipeElement = document.querySelector(`#recipe-${id} .fav`);
+  const heart = document.querySelector(`#recipe-${id} .fav`);
 
-  // change colour of the add favourite recipes button
-  recipeElement.style.color = "red";
-  recipeElement.style.background = "white";
+  usersRef.doc(userData.uid).get().then(function (userDoc) {
+    console.log(userDoc.data().favourites);
+    if (userDoc.data().favourites.includes(id)) {
+      deleteFavourites(id);
+    } else {
+      addFavourite(id);
+    }
 
+    heart.classList.toggle('is-liked')
+  })
+};
+
+function addFavourite(id) {
   usersRef.doc(userData.uid).set({
     favourites: firebase.firestore.FieldValue.arrayUnion(id)
   }, {
@@ -447,7 +441,7 @@ function deleteFavourites(id) {
   usersRef.doc(userData.uid).update({
     favourites: firebase.firestore.FieldValue.arrayRemove(id)
   });
-}
+};
 
 //MY Recipes
 
@@ -477,41 +471,49 @@ function deleteFavourites(id) {
 //
 
 // ADD NEW NEW INGREDIENT OF RECIPE IN POP UP ==================================
+let ingredientIndex = 2;
+
 function addIngredient() {
-  let htmlTemplate = "";
-  htmlTemplate = `
+  const ingredientElement = document.createElement("div");
+  let htmlTemplate = `
     <div class="delete-area">
-        <div class = "input-field col s6 ingredient-margin">
-            <input placeholder = "Amount" id = "amount" type = "text" >
+        <div class="input-field col s6 ingredient-margin">
+            <input placeholder="Amount" name="ingredient${ingredientIndex}-amount" type="text" >
         </div>
-        <div class = "input-field col s6 ingredient-margin input-flex">
-            <input placeholder = "Ingredient" id = "ingredient" type = "text" >
+        <div class="input-field col s6 ingredient-margin input-flex">
+            <input placeholder="Ingredient" name="ingredient${ingredientIndex}" type="text" >
             <a class="delete" onclick="deleteInputIng(this)">
             <i class="material-icons">clear</i>
             </a>
         </div>
 
     </div>`;
-  document.querySelector('.field-ingredient').innerHTML += htmlTemplate;
+  ingredientElement.classList.add("delete-area");
+  ingredientElement.innerHTML = htmlTemplate;
+  document.querySelector('.field-ingredient').appendChild(ingredientElement);
+
+  ingredientIndex += 1;
 };
 
 // ADD THE NEW STEP OF RECIPE IN POP UP ========================================
+let stepNumber = 2;
+
 function addStep() {
   if (stepNumber < 10) {
-    stepNumber++
-
-    let htmlTemplate = "";
-    htmlTemplate = `
-    <div class="delete-area">
+    const stepElement = document.createElement("div");
+    let htmlTemplate = `
     <div class="input-field col s12 input-flex step-${stepNumber}">
     <span class="small-button number-step"> ${stepNumber} </span>
-    <input type = "text" placeholder="Type another step of the recipe">
+    <input type ="text" name="step${stepNumber}" placeholder="Type another step of the recipe">
     <a class="delete" onclick="deleteInput(this)">
     <i class="material-icons">clear</i>
     </a>
-    </div>
     </div>`;
-    document.querySelector('.policko').innerHTML += htmlTemplate;
+
+    stepElement.classList.add("delete-area");
+    stepElement.innerHTML = htmlTemplate;
+    document.querySelector('.policko').appendChild(stepElement)
+    stepNumber++;
   }
 };
 
@@ -531,27 +533,85 @@ function deleteInputIng() {
   element.parentNode.removeChild(element);
 };
 
-// SAVING NEW RECIPE ==========================================================
-function newRecipe() {
-  // references to the input fields
-  let titleInput = document.querySelector('#title');
-  let pictureInput = document.querySelector('#mail');
-  let ingredients = document.querySelector('#ingredients');
-  let steps = document.querySelector('#steps').value;
-  // console.log(titleInput.value);
-  // console.log(pictureInput.value);
+// SAVING NEW RECIPE ===========================================================
+// Recipe form submit handler
+const addRecipeForm = document.getElementById('addRecipeForm');
+addRecipeForm.addEventListener('submit', (event) => {
+  // Prevent browser from reloading the page after form submit
+  event.preventDefault();
 
-  for (let step of steps) {
-    steps = [`
-        step${stepNumber}= step-${stepNumber}.value;
-        `];
-    console.log(steps);
+  // input values of addRecipeForm
+  const formData = new FormData(addRecipeForm);
+
+  newRecipe(formData);
+}, false);
+
+function handleFileSelect(event) {
+  selectedFile = event.target.files[0];
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("picture").addEventListener('change', handleFileSelect, false);
+});
+
+function newRecipe(formData) {
+  // References to the input fields
+  let titleInput = document.querySelector('#title');
+  let filename = selectedFile.name;
+  let storageRef = firebase.storage().ref('/recipeImages/' + filename);
+  let uploadTask = storageRef.put(selectedFile);
+  let newRecipe = {
+    title: formData.get('title'),
+    img: "",
+    ingredients: [],
+    steps: []
   };
 
-  let newRecipe = [
-    title = titleInput.value,
-    picture = pictureInput.value,
-  ];
+  // get all steps and ingredients from formData
+  for (const entry of formData.entries()) {
+    const key = entry[0];
+    const value = entry[1];
 
-  myRecipesRef.add(newRecipe);
+    if (key.includes("step")) {
+      newRecipe.steps.push(value);
+    } else if (key.includes("ingredient") && !key.includes("amount")) {
+      const ingredient = {
+        title: value,
+        amount: formData.get(`${key}-amount`)
+      };
+
+      newRecipe.ingredients.push(ingredient);
+    }
+  }
+
+  // Register three observers:
+  // 1. 'state_changed' observer, called any time the state changes
+  // 2. Error observer, called on failure
+  // 3. Completion observer, called on successful completion
+  uploadTask.on('state_changed',
+    function (snapshot) {
+      // Observe state change events such as progress, pause, and resume
+    },
+    function (error) {
+      // Handle unsuccessful uploads
+    },
+    function () {
+      uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+        newRecipe.img = downloadURL;
+        // myRecipesRef.add(newRecipe);
+
+        usersRef.doc(userData.uid).set({
+          myRecipes: firebase.firestore.FieldValue.arrayUnion(newRecipe)
+        }, {
+          merge: true
+        }).then(() => {
+          addRecipeForm.reset();
+          showPage("recipes", true);
+        }).catch((error) => {
+          console.error(error);
+        });
+      })
+    }
+  );
+
 }

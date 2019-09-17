@@ -128,8 +128,6 @@
         <!-- button show recipes -->
         <a class="waves-effect waves-light btn radius" onclick="searchRecipe()">SHOW RECIPES</a>
       </div>
-
-
       <!-- card -->
       <div id="recipes-container" class="row">
       </div>
@@ -176,52 +174,39 @@
         </a>
         <h1>Add your own recipe</h1>
         <div class="row">
-          <form class="col s12">
-
+          <form id="addRecipeForm" class="col s12">
             <div class="input-field col s12">
-              <input placeholder="Type the name of the recipe" id="title" type="text">
+              <input placeholder="Type the name of the recipe" id="title" name="title" type="text">
             </div>
-
             <div class="file-field input-field col s12">
               <div class="btn waves-effect waves-light btn radius small-button">
-                <input type="file" class="small-button">
+                <input type="file" class="small-button" name="picture" id="picture">
                 <span>Image </span>
               </div>
               <div class="file-path-wrapper">
                 <input class="file-path" type="text">
               </div>
             </div>
-
-
             <div class="input-field col s6 ingredient-margin input-flex ">
-              <input placeholder="Amount" id="amount" type="text">
+              <input placeholder="Amount" class="amount" name="ingredient1-amount" type="text">
             </div>
             <div class="input-field col s6 ingredient-margin input-flex">
-              <input placeholder="Ingredient" id="ingredient" type="text">
-
+              <input placeholder="Ingredient" class="ingredients" name="ingredient1" type="text">
             </div>
-
-            <div class=" field-ingredient">
-            </div>
-
+            <div class=" field-ingredient"></div>
             <a class="waves-effect waves-light btn radius" name="button" onclick="addIngredient()">ADD INGREDIENT</a>
-
             <div class="input-field col s12 input-flex">
               <span class="small-button number-step"> 1 </span>
-              <input type="text" id="steps" placeholder="Type the first step of the recipe" required="">
-
+              <input type="text" class="step" name="step1" placeholder="Type the first step of the recipe">
             </div>
-
-            <div class="policko">
-            </div>
-
+            <div class="policko"></div>
             <a class="waves-effect waves-light btn radius" name="button" onclick="addStep()">ADD STEP</a>
             <br>
             <br>
             <br>
             <br>
             <div class="save">
-              <a class="waves-effect waves-light btn radius" name="button" onclick="newRecipe()">SAVE RECIPE</a>
+              <button class="waves-effect waves-light btn radius" type="submit" name="button">SAVE RECIPE</button>
             </div>
           </form>
         </div>
@@ -251,6 +236,7 @@
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-storage.js"></script>
   <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
   <!-- Compiled and minified JavaScript -->
 
