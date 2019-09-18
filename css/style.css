@@ -487,6 +487,16 @@ i.heart.is-liked {
   background-color: #FFA256;
 }
 
+.toast-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.again-center {
+  display: flex;
+  justify-content: center;
+}
+
 .link {
   color: white;
   text-decoration: underline;
@@ -501,14 +511,17 @@ i.heart.is-liked {
 /* END welcome page*/
 /* log in page*/
 .login {
+  position: fixed;
   background: var(--orange);
   text-align: center;
   color: white;
   padding: 1rem 20px;
   height: 100vh;
+  width: 100vw;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  z-index: 9000;
 }
 
 /* log in page*/
